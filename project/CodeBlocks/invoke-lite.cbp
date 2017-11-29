@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Invoke Lite" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="default">
+				<Option output="optional-bare" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+		</Build>
+		<Unit filename="../../.gitignore" />
+		<Unit filename="../../LICENSE" />
+		<Unit filename="../../example/invoke.cpp" />
+		<Unit filename="../../example/t.bat" />
+		<Unit filename="../../example/tg.bat" />
+		<Unit filename="../../include/nonstd/invoke.hpp" />
+		<Unit filename="../../spike/invoke.sav.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
