@@ -15,7 +15,7 @@
 
 // invoke-lite/example/invoke.cpp
 
-#include <invoke.hpp>
+#include "nonstd/invoke.hpp"
 #include <iostream>
 
 struct Foo
@@ -121,7 +121,7 @@ int main()
 }
 
 // MSVC 2010 (VC10) and newer
-// cl -EHsc -I../include/ invoke.cpp && invoke.exe
+// cl -EHsc -I../include invoke.cpp && invoke.exe
 
 // GNUC, std=c++98, c++11, c++17
-// g++ -std=c++98 -I../include/ -o invoke.exe invoke.cpp && invoke.exe
+// g++ -std=c++98 -I../include -o invoke.exe invoke.cpp && invoke.exe
