@@ -1,1 +1,1 @@
-cl -EHsc -I../include/ invoke.cpp && invoke.exe
+cl -EHsc -I../include invoke.cpp && invoke.exe
