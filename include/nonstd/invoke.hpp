@@ -22,6 +22,10 @@
 #define invoke_CPP14_OR_GREATER  ( __cplusplus >= 201402L )
 #define invoke_CPP17_OR_GREATER  ( __cplusplus >= 201703L )
 
+#ifndef  invoke_USE_ALTERNATE_IMPL
+# define invoke_USE_ALTERNATE_IMPL  0
+#endif
+
 #if invoke_CPP17_OR_GREATER
 
 //
