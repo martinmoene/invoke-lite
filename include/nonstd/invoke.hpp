@@ -43,8 +43,34 @@ namespace nonstd {
 #include <type_traits>
 #include <utility>
 
+#if invoke_USE_ALTERNATE_IMPL   // see issue #1
+# include <functional>
+#endif
+
 namespace nonstd {
 namespace detail {
+
+#if invoke_USE_ALTERNATE_IMPL   // see issue #1
+
+template< typename F, typename ... Args >
+auto INVOKE( F&& fn, Args&& ... args )
+-> typename std::enable_if<
+    std::is_member_pointer<typename std::decay<F>::type>::value,
+    decltype(std::mem_fn(fn)( std::forward<Args>(args)...) )>::type
+{
+    return std::mem_fn(fn)( std::forward<Args>(args)...);
+}
+
+template< typename F, typename ... Args >
+auto INVOKE( F&& fn, Args&& ... args )
+-> typename std::enable_if<
+    not std::is_member_pointer<typename std::decay<F>::type>::value,
+    decltype(std::forward<F>(fn)( std::forward<Args>(args)...) )>::type
+{
+    return std::forward<F>(fn)(std::forward<Args>(args)...);
+}
+
+#else // invoke_USE_ALTERNATE_IMPL
 
 template< typename T > struct is_reference_wrapper : std::false_type {};
 template< typename U > struct is_reference_wrapper<std::reference_wrapper<U>> : std::true_type {};
@@ -119,6 +145,8 @@ auto INVOKE( F && f, Args &&... args )
 {
     return std::forward<F>( f )( std::forward<Args>( args )...);
 }
+
+#endif // invoke_USE_ALTERNATE_IMPL
 
 } // namespace detail
 
