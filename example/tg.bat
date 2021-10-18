@@ -1,8 +1,5 @@
 @setlocal
 @set std=%1
-@if "%std%"=="" set std=c++98
-g++ -std=%std% -isystem lest -I../include -o invoke.exe invoke.cpp && invoke.exe
-
-::g++ -std=%std% -O2 -Wall -Wextra -Wno-unused-parameter -isystem lest -I../include optional-bare.t.cpp -o optional-bare.t.exe optional.t.cpp && optional-bare.t.exe
+@if "%std%"=="" set std=c++11
+g++ -std=%std% -Dinvoke_CONFIG_SELECT_INVOKE=invoke_invoke_NONSTD -Dinvoke_USE_ALTERNATE_IMPL=1 -isystem lest -I../include -o invoke.exe invoke.cpp && invoke.exe
 @endlocal
-
