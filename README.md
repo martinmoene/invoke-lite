@@ -22,30 +22,13 @@ A work in its infancy. Suggested by Peter Featherstone.
 ## Example usage
 
 ```Cpp
-#include "nonstd/invoke.hpp"
-#include <iostream>
-
-int main(int argc, char **)
-{
-    int product = 0;
-    const int six = 6;
-    const int seven = 7;
-
-    {
-        nonstd::invoke thr{[&](int x, int y){ product = x * y; }, six, seven };
-
-        // automatically join thread here, making sure it has executed:
-    }
-
-    std::cout << "Product of "<< six << " and " << seven << " is " << product << ".\n";
-}
+TBD
 ```
 
 ### Compile and run
 
 ```Text
-$ g++ -std=c++11 -Wall -I../include/ -o 02-arguments.exe 02-arguments.cpp && 02-arguments.exe
-Product of 6 and 7 is 42.
+TBD
 ```
 
 ## In a nutshell
@@ -119,7 +102,7 @@ Define this to 1 if you want to compile without exceptions. If not defined, the 
 
 ## Notes and references
 
-- [p0660](http://wg21.link/p0660) - Stop Token and Joining Thread. Nicolai Josuttis, Lewis Baker, Billy O’Neal, Herb Sutter, Anthony Williams. 2019.
+- TBD
 
 ## Appendix
 
