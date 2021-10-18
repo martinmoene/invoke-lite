@@ -33,9 +33,9 @@ TBD
 
 ## In a nutshell
 
-**invoke lite** is a single-file header-only library to provide [C++17's invoke](https://en.cppreference.com/w/cpp/thread/invoke) for use with C++11 and later. If available, the standard library is used, unless [configured](#configuration) otherwise.
+**invoke lite** is a single-file header-only library to provide [C++17's invoke](https://en.cppreference.com/w/cpp/thread/invoke) for use with C++98 and later. If available, the standard library is used, unless [configured](#configuration) otherwise.
 
-Currently `nonstd::invoke` does not (yet) support thread cancellation using [`stop_token`](https://en.cppreference.com/w/cpp/thread/stop_token), [`stop_source`](https://en.cppreference.com/w/cpp/thread/stop_source) and [`stop_callback`](https://en.cppreference.com/w/cpp/thread/stop_callback). It also does not support [`std::condition_variable_any`](https://en.cppreference.com/w/cpp/thread/condition_variable_any).
+Currently `nonstd::invoke` ... .
 
 **Features and properties of invoke lite** are ease of installation (single header), freedom of dependencies other than the standard library.
 
