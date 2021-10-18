@@ -16,21 +16,94 @@
 #ifndef NONSTD_INVOKE_LITE_HPP
 #define NONSTD_INVOKE_LITE_HPP
 
-#define invoke_lite_VERSION  "0.0.0"
+#define invoke_lite_MAJOR  0
+#define invoke_lite_MINOR  0
+#define invoke_lite_PATCH  0
 
-#define invoke_CPP11_OR_GREATER  ( __cplusplus >= 201103L )
-#define invoke_CPP14_OR_GREATER  ( __cplusplus >= 201402L )
-#define invoke_CPP17_OR_GREATER  ( __cplusplus >= 201703L )
+#define invoke_lite_VERSION  invoke_STRINGIFY(invoke_lite_MAJOR) "." invoke_STRINGIFY(invoke_lite_MINOR) "." invoke_STRINGIFY(invoke_lite_PATCH)
+
+#define invoke_STRINGIFY(  x )  invoke_STRINGIFY_( x )
+#define invoke_STRINGIFY_( x )  #x
+
+// invoke-lite configuration:
+
+#define invoke_invoke_DEFAULT  0
+#define invoke_invoke_NONSTD   1
+#define invoke_invoke_STD      2
+
+// tweak header support:
+
+#ifdef __has_include
+# if __has_include(<nonstd/invoke.tweak.hpp>)
+#  include <nonstd/invoke.tweak.hpp>
+# endif
+#define invoke_HAVE_TWEAK_HEADER  1
+#else
+#define invoke_HAVE_TWEAK_HEADER  0
+//# pragma message("invoke.hpp: Note: Tweak header not supported.")
+#endif
+
+// invoke selection and configuration:
+
+#ifndef  invoke_CONFIG_SELECT_INVOKE
+# define invoke_CONFIG_SELECT_INVOKE  ( invoke_HAVE_STD_INVOKE ? invoke_invoke_STD : invoke_invoke_NONSTD )
+#endif
 
 #ifndef  invoke_USE_ALTERNATE_IMPL
 # define invoke_USE_ALTERNATE_IMPL  0
 #endif
 
-#if invoke_CPP17_OR_GREATER
+// Control presence of exception handling (try and auto discover):
+
+#ifndef invoke_CONFIG_NO_EXCEPTIONS
+# if defined(_MSC_VER)
+#  include <cstddef>    // for _HAS_EXCEPTIONS
+# endif
+# if defined(__cpp_exceptions) || defined(__EXCEPTIONS) || (_HAS_EXCEPTIONS)
+#  define invoke_CONFIG_NO_EXCEPTIONS  0
+# else
+#  define invoke_CONFIG_NO_EXCEPTIONS  1
+# endif
+#endif
+
+// C++ language version detection (C++20 is speculative):
+// Note: VC14.0/1900 (VS2015) lacks too much from C++14.
+
+#ifndef   invoke_CPLUSPLUS
+# if defined(_MSVC_LANG ) && !defined(__clang__)
+#  define invoke_CPLUSPLUS  (_MSC_VER == 1900 ? 201103L : _MSVC_LANG )
+# else
+#  define invoke_CPLUSPLUS  __cplusplus
+# endif
+#endif
+
+#define invoke_CPP98_OR_GREATER  ( invoke_CPLUSPLUS >= 199711L )
+#define invoke_CPP11_OR_GREATER  ( invoke_CPLUSPLUS >= 201103L )
+#define invoke_CPP14_OR_GREATER  ( invoke_CPLUSPLUS >= 201402L )
+#define invoke_CPP17_OR_GREATER  ( invoke_CPLUSPLUS >= 201703L )
+#define invoke_CPP20_OR_GREATER  ( invoke_CPLUSPLUS >= 202000L )
+
+// Use C++17 std::invoke if available and requested:
+
+#if invoke_CPP17_OR_GREATER && defined(__has_include )
+# if __has_include( <invoke> )
+#  define invoke_HAVE_STD_INVOKE  1
+# else
+#  define invoke_HAVE_STD_INVOKE  0
+# endif
+#else
+# define  invoke_HAVE_STD_INVOKE  0
+#endif
+
+#define  invoke_USES_STD_INVOKE  ( (invoke_CONFIG_SELECT_INVOKE == invoke_invoke_STD) || ((invoke_CONFIG_SELECT_INVOKE == invoke_invoke_DEFAULT) && invoke_HAVE_STD_INVOKE) )
 
 //
-// C++17, use standard version:
+// Use standard C++17 version:
 //
+
+#if invoke_USES_STD_INVOKE
+
+#pragma message ("*** Using std::invoke")
 
 #include <functional>
 
@@ -39,6 +112,7 @@ namespace nonstd {
 }
 
 #elif invoke_CPP11_OR_GREATER
+#pragma message ("*** Using nonstd::invoke - C++11")
 
 //
 // C++11, code taken from http://en.cppreference.com/w/cpp/types/result_of:
@@ -51,10 +125,175 @@ namespace nonstd {
 # include <functional>
 #endif
 
+// Compiler versions:
+//
+// MSVC++  6.0  _MSC_VER == 1200  invoke_COMPILER_MSVC_VERSION ==  60  (Visual Studio 6.0)
+// MSVC++  7.0  _MSC_VER == 1300  invoke_COMPILER_MSVC_VERSION ==  70  (Visual Studio .NET 2002)
+// MSVC++  7.1  _MSC_VER == 1310  invoke_COMPILER_MSVC_VERSION ==  71  (Visual Studio .NET 2003)
+// MSVC++  8.0  _MSC_VER == 1400  invoke_COMPILER_MSVC_VERSION ==  80  (Visual Studio 2005)
+// MSVC++  9.0  _MSC_VER == 1500  invoke_COMPILER_MSVC_VERSION ==  90  (Visual Studio 2008)
+// MSVC++ 10.0  _MSC_VER == 1600  invoke_COMPILER_MSVC_VERSION == 100  (Visual Studio 2010)
+// MSVC++ 11.0  _MSC_VER == 1700  invoke_COMPILER_MSVC_VERSION == 110  (Visual Studio 2012)
+// MSVC++ 12.0  _MSC_VER == 1800  invoke_COMPILER_MSVC_VERSION == 120  (Visual Studio 2013)
+// MSVC++ 14.0  _MSC_VER == 1900  invoke_COMPILER_MSVC_VERSION == 140  (Visual Studio 2015)
+// MSVC++ 14.1  _MSC_VER >= 1910  invoke_COMPILER_MSVC_VERSION == 141  (Visual Studio 2017)
+// MSVC++ 14.2  _MSC_VER >= 1920  invoke_COMPILER_MSVC_VERSION == 142  (Visual Studio 2019)
+
+#if defined(_MSC_VER ) && !defined(__clang__)
+# define invoke_COMPILER_MSVC_VER      (_MSC_VER )
+# define invoke_COMPILER_MSVC_VERSION  (_MSC_VER / 10 - 10 * ( 5 + (_MSC_VER < 1900 ) ) )
+#else
+# define invoke_COMPILER_MSVC_VER      0
+# define invoke_COMPILER_MSVC_VERSION  0
+#endif
+
+#define invoke_COMPILER_VERSION( major, minor, patch )  ( 10 * ( 10 * (major) + (minor) ) + (patch) )
+
+#if defined(__clang__)
+# define invoke_COMPILER_CLANG_VERSION  invoke_COMPILER_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#else
+# define invoke_COMPILER_CLANG_VERSION  0
+#endif
+
+#if defined(__GNUC__) && !defined(__clang__)
+# define invoke_COMPILER_GNUC_VERSION  invoke_COMPILER_VERSION(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
+#else
+# define invoke_COMPILER_GNUC_VERSION  0
+#endif
+
+// half-open range [lo..hi):
+//#define invoke_BETWEEN( v, lo, hi ) ( (lo) <= (v) && (v) < (hi) )
+
+// Presence of language and library features:
+
+#define invoke_HAVE( feature )  ( invoke_HAVE_##feature )
+
+#ifdef _HAS_CPP0X
+# define invoke_HAS_CPP0X  _HAS_CPP0X
+#else
+# define invoke_HAS_CPP0X  0
+#endif
+
+#define invoke_CPP11_90   (invoke_CPP11_OR_GREATER || invoke_COMPILER_MSVC_VER >= 1500)
+#define invoke_CPP11_100  (invoke_CPP11_OR_GREATER || invoke_COMPILER_MSVC_VER >= 1600)
+#define invoke_CPP11_120  (invoke_CPP11_OR_GREATER || invoke_COMPILER_MSVC_VER >= 1800)
+#define invoke_CPP11_140  (invoke_CPP11_OR_GREATER || invoke_COMPILER_MSVC_VER >= 1900)
+
+#define invoke_CPP14_000  (invoke_CPP14_OR_GREATER)
+#define invoke_CPP17_000  (invoke_CPP17_OR_GREATER)
+
+// Presence of C++11 language features:
+
+#define invoke_HAVE_CONSTEXPR_11           invoke_CPP11_140
+#define invoke_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG \
+                                        invoke_CPP11_120
+#define invoke_HAVE_INITIALIZER_LIST       invoke_CPP11_120
+#define invoke_HAVE_NOEXCEPT               invoke_CPP11_140
+#define invoke_HAVE_NULLPTR                invoke_CPP11_100
+#define invoke_HAVE_TYPE_TRAITS            invoke_CPP11_90
+#define invoke_HAVE_STATIC_ASSERT          invoke_CPP11_100
+#define invoke_HAVE_ADD_CONST              invoke_CPP11_90
+#define invoke_HAVE_OVERRIDE               invoke_CPP11_90
+#define invoke_HAVE_REMOVE_REFERENCE       invoke_CPP11_90
+
+#define invoke_HAVE_TR1_ADD_CONST          (!! invoke_COMPILER_GNUC_VERSION )
+#define invoke_HAVE_TR1_REMOVE_REFERENCE   (!! invoke_COMPILER_GNUC_VERSION )
+#define invoke_HAVE_TR1_TYPE_TRAITS        (!! invoke_COMPILER_GNUC_VERSION )
+
+// Presence of C++11 language features:
+
+#define invoke_HAVE_CONSTEXPR_11           invoke_CPP11_140
+#define invoke_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG \
+                                        invoke_CPP11_120
+#define invoke_HAVE_INITIALIZER_LIST       invoke_CPP11_120
+#define invoke_HAVE_NOEXCEPT               invoke_CPP11_140
+#define invoke_HAVE_NULLPTR                invoke_CPP11_100
+#define invoke_HAVE_TYPE_TRAITS            invoke_CPP11_90
+#define invoke_HAVE_STATIC_ASSERT          invoke_CPP11_100
+#define invoke_HAVE_ADD_CONST              invoke_CPP11_90
+#define invoke_HAVE_OVERRIDE               invoke_CPP11_90
+#define invoke_HAVE_REMOVE_REFERENCE       invoke_CPP11_90
+
+#define invoke_HAVE_TR1_ADD_CONST          (!! invoke_COMPILER_GNUC_VERSION )
+#define invoke_HAVE_TR1_REMOVE_REFERENCE   (!! invoke_COMPILER_GNUC_VERSION )
+#define invoke_HAVE_TR1_TYPE_TRAITS        (!! invoke_COMPILER_GNUC_VERSION )
+
+// Presence of C++14 language features:
+
+#define invoke_HAVE_CONSTEXPR_14           invoke_CPP14_000
+
+// Presence of C++17 language features:
+
+#define invoke_HAVE_NODISCARD              invoke_CPP17_000
+
+// Presence of C++ language features:
+
+#if invoke_HAVE_CONSTEXPR_11
+# define invoke_constexpr constexpr
+#else
+# define invoke_constexpr /*constexpr*/
+#endif
+
+#if invoke_HAVE_CONSTEXPR_14
+# define invoke_constexpr14 constexpr
+#else
+# define invoke_constexpr14 /*constexpr*/
+#endif
+
+#if invoke_HAVE_NOEXCEPT
+# define invoke_noexcept noexcept
+#else
+# define invoke_noexcept /*noexcept*/
+#endif
+
+#if invoke_HAVE_NULLPTR
+# define invoke_nullptr nullptr
+#else
+# define invoke_nullptr NULL
+#endif
+
+#if invoke_HAVE_NODISCARD
+# define invoke_nodiscard [[nodiscard]]
+#else
+# define invoke_nodiscard /*[[nodiscard]]*/
+#endif
+
+#if invoke_HAVE_OVERRIDE
+# define invoke_override override
+#else
+# define invoke_override /*override*/
+#endif
+
+// additional includes:
+
+#if invoke_CONFIG_NO_EXCEPTIONS
+# include <cassert>
+#else
+# include <typeinfo>
+#endif
+
+#if ! invoke_HAVE_NULLPTR
+# include <cstddef>
+#endif
+
+#if invoke_HAVE_INITIALIZER_LIST
+# include <initializer_list>
+#endif
+
+#if invoke_HAVE_TYPE_TRAITS
+# include <type_traits>
+#elif invoke_HAVE_TR1_TYPE_TRAITS
+# include <tr1/type_traits>
+#endif
+
 namespace nonstd {
 namespace detail {
 
 #if invoke_USE_ALTERNATE_IMPL   // see issue #1
+
+#pragma message ("*** Using alternate version")
+
+// C++11 implementation contributed by Peter Featherstone, @pfeatherstone
 
 template< typename F, typename ... Args >
 auto INVOKE( F&& fn, Args&& ... args )
@@ -68,7 +307,7 @@ auto INVOKE( F&& fn, Args&& ... args )
 template< typename F, typename ... Args >
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
-    not std::is_member_pointer<typename std::decay<F>::type>::value,
+    ! std::is_member_pointer<typename std::decay<F>::type>::value,
     decltype(std::forward<F>(fn)( std::forward<Args>(args)...) )>::type
 {
     return std::forward<F>(fn)(std::forward<Args>(args)...);
@@ -190,6 +429,8 @@ typename invoke_result< F, Args...>::type invoke( F && f, Args &&... args )
 } // namespace nonstd
 
 #else // not C++17, not C++11
+
+#pragma message ("*** Using nonstd::invoke - C++98")
 
 //
 // C++98, code based on proposal n1454.
