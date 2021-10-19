@@ -1,8 +1,8 @@
-# invoke lite: C++17's invoke for C++98 and later
+# invoke lite: C++17's invoke for C++98 and later and apply for C++14 and later
 
-A work in its infancy. Suggested by Peter Featherstone.
+A work in its infancy. Suggested and contributed to by Peter Featherstone.
 
-[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://travis-ci.org/martinmoene/invoke-lite.svg?branch=master)](https://travis-ci.org/martinmoene/invoke-lite) [![Build status](https://ci.appveyor.com/api/projects/status/nrnbfhvvp39ex075?svg=true)](https://ci.appveyor.com/project/martinmoene/invoke-lite) [![Version](https://badge.fury.io/gh/martinmoene%2Finvoke-lite.svg)](https://github.com/martinmoene/invoke-lite/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://raw.githubusercontent.com/martinmoene/invoke-lite/master/include/nonstd/invoke.hpp) [![Conan](https://img.shields.io/badge/on-conan-blue.svg)]() [![Try it online](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/permlink/DiMxDuWYOiUMKsdj) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/z/7dEz5r)
+[![Language](https://img.shields.io/badge/C%2B%2B-11/14/17/20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![License](https://img.shields.io/badge/license-BSL-blue.svg)](https://opensource.org/licenses/BSL-1.0) [![Build Status](https://github.com/martinmoene/any-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/martinmoene/any-lite/actions/workflows/ci.yml) [![Build Status](https://travis-ci.org/martinmoene/invoke-lite.svg?branch=master)](https://travis-ci.org/martinmoene/invoke-lite) [![Build status](https://ci.appveyor.com/api/projects/status/nrnbfhvvp39ex075?svg=true)](https://ci.appveyor.com/project/martinmoene/invoke-lite) [![Version](https://badge.fury.io/gh/martinmoene%2Finvoke-lite.svg)](https://github.com/martinmoene/invoke-lite/releases) [![download](https://img.shields.io/badge/latest-download-blue.svg)](https://raw.githubusercontent.com/martinmoene/invoke-lite/master/include/nonstd/invoke.hpp) [![Conan](https://img.shields.io/badge/on-conan-blue.svg)]() [![Try it online](https://img.shields.io/badge/on-wandbox-blue.svg)](https://wandbox.org/permlink/DiMxDuWYOiUMKsdj) [![Try it on godbolt online](https://img.shields.io/badge/on-godbolt-blue.svg)](https://godbolt.org/z/7dEz5r)
 
 **Contents**  
 
@@ -37,6 +37,8 @@ TBD
 
 Currently `nonstd::invoke` ... .
 
+Currently `nonstd::apply` ... .
+
 **Features and properties of invoke lite** are ease of installation (single header), freedom of dependencies other than the standard library.
 
 **Limitations of invoke lite** are ... \[*to be summed up*\].
@@ -63,12 +65,14 @@ Currently `nonstd::invoke` ... .
 
 \[*Envisioned*\] Depending on the compiler and C++ standard used, *invoke lite* behaves less or more like the standard's version. To get an idea of the capabilities of *invoke lite* with your configuration, look at the output of the [tests](test/invoke.t.cpp), issuing `invoke-main.t --pass @`.
 
-For the standard's documentation, see [`invoke`](https://en.cppreference.com/w/cpp/utility/functional/invoke), which is part of the [C++ utility library](https://en.cppreference.com/w/cpp/utility).
+For the standard's documentation, see [`invoke`](https://en.cppreference.com/w/cpp/utility/functional/invoke), which is part of the [C++ utility function objects library](https://en.cppreference.com/w/cpp/utility/functional) and [`apply`](https://en.cppreference.com/w/cpp/utility/apply), which is part of the [C++ utility library](https://en.cppreference.com/w/cpp/utility).
 
 ### *invoke lite* implementation status
 
 | Kind               | Type or function             | Notes |
 |--------------------|------------------------------|-------|
+| &nbsp;             | apply()  | &nbsp; |
+| &nbsp;             | invoke() | &nbsp; |
 | &nbsp;             | &nbsp; | &nbsp; |
 
 ### Configuration
