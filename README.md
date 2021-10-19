@@ -1,4 +1,4 @@
-# invoke lite: C++17's invoke for C++98 and later and apply for C++14 and later
+# invoke lite: C++17's invoke for C++98 and later and apply for C++11 and later
 
 A work in its infancy. Suggested and contributed to by Peter Featherstone.
 
@@ -33,7 +33,7 @@ TBD
 
 ## In a nutshell
 
-**invoke lite** is a single-file header-only library to provide [C++17's invoke](https://en.cppreference.com/w/cpp/thread/invoke) for use with C++98 and later. If available, the standard library is used, unless [configured](#configuration) otherwise.
+**invoke lite** is a single-file header-only library to provide [C++17's invoke](https://en.cppreference.com/w/cpp/thread/invoke) for use with C++98 and later and [C++17's apply]() for use with C++11 and later. If available, the standard library is used, unless [configured](#configuration) otherwise.
 
 Currently `nonstd::invoke` ... .
 
