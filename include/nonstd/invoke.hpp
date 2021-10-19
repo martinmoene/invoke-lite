@@ -1,17 +1,10 @@
 //
-// Copyright (c) 2017 Martin Moene
+// Copyright (c) 2017-2021 Martin Moene
 //
 // https://github.com/martinmoene/invoke-lite
 //
-// This code is licensed under the MIT License (MIT).
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef NONSTD_INVOKE_LITE_HPP
 #define NONSTD_INVOKE_LITE_HPP
@@ -179,6 +172,7 @@ namespace nonstd {
 #define invoke_CPP11_120  (invoke_CPP11_OR_GREATER || invoke_COMPILER_MSVC_VER >= 1800)
 #define invoke_CPP11_140  (invoke_CPP11_OR_GREATER || invoke_COMPILER_MSVC_VER >= 1900)
 
+#define invoke_CPP11_000  (invoke_CPP11_OR_GREATER)
 #define invoke_CPP14_000  (invoke_CPP14_OR_GREATER)
 #define invoke_CPP17_000  (invoke_CPP17_OR_GREATER)
 
@@ -428,7 +422,7 @@ typename invoke_result< F, Args...>::type invoke( F && f, Args &&... args )
 
 } // namespace nonstd
 
-#else // not C++17, not C++11
+#else // not C++17, not C++11 - invoke()
 
 #pragma message ("*** Using nonstd::invoke - C++98")
 
@@ -589,12 +583,127 @@ template< typename R, typename Base, typename Obj, typename T1, typename T2 > R 
 template< typename R, typename Base, typename Obj, typename A1, typename A2
                                                  , typename T1, typename T2 > R invoke( R (Base::*pmf)(A1,A2)      , Obj       * ptr, T2       & t1 , T2       & t2 ) { return ((*ptr).*pmf)( t1, t2 ); }
 
-} // namespace std98
+}} // namespace nonstd::std98
 
-using namespace std98;
+// Bring C++98 invoke() into scope nonstd:
 
-} // namespace nonstd
+namespace nonstd {
 
-#endif // invoke_CPP17_OR_GREATER, invoke_CPP11_OR_GREATER
+using std98::invoke;
+
+}
+
+
+#endif // invoke_CPP17_OR_GREATER, invoke_CPP11_OR_GREATER - invoke()
+
+//
+// nonstd::apply():
+//
+
+// C++11 implementation contributed by Peter Featherstone, @pfeatherstone
+
+#if invoke_USES_STD_INVOKE
+
+#pragma message ("*** Using std::apply.")
+
+#include <tuple>
+
+using std::apply;
+
+namespace nonstd {
+    using std::apply;
+}
+
+#elif invoke_CPP11_OR_GREATER
+
+#pragma message ("*** Using nonstd::invoke - C++11")
+
+namespace nonstd { namespace apply_lite {
+
+#if invoke_CPLUSPLUS < 201402L
+
+#pragma message ("*** Defining index_sequence etc.")
+
+template< std::size_t... Ints >
+struct index_sequence
+{
+    using type       = index_sequence;
+    using value_type = std::size_t;
+
+    static constexpr std::size_t size() noexcept { return sizeof...(Ints); }
+};
+
+template< class Sequence1, class Sequence2 >
+struct merge_and_renumber;
+
+template< std::size_t... I1, std::size_t... I2 >
+struct merge_and_renumber< index_sequence<I1...>, index_sequence<I2...>>
+    : index_sequence<I1..., (sizeof...(I1) + I2)...> {};
+
+template<std::size_t N>
+struct make_index_sequence
+    : merge_and_renumber<
+        typename make_index_sequence < N / 2 >::type,
+        typename make_index_sequence < N - N / 2 >::type > {};
+
+template<> struct make_index_sequence<0> : index_sequence<> {};
+template<> struct make_index_sequence<1> : index_sequence<0> {};
+
+template<typename... Ts>
+using index_sequence_for = make_index_sequence<sizeof...(Ts)>;
+
+#else // invoke_CPLUSPLUS < 201402L
+
+using std::index_sequence;
+using std::make_index_sequence;
+using std::index_sequence_for;
+
+#endif // invoke_CPLUSPLUS < 201402L
+
+#pragma message ("*** Using nonstd::apply.")
+
+namespace detail {
+
+template<typename F, typename Tuple, std::size_t... I>
+auto apply_impl(F&& fn, Tuple&& tpl, index_sequence<I...>)
+    -> decltype( invoke( std::forward<F>(fn), std::get<I>(std::forward<Tuple>(tpl) )...) )
+{
+    return invoke( std::forward<F>(fn), std::get<I>( std::forward<Tuple>(tpl) )...);
+}
+
+} // namespace detail
+
+template< typename F, typename Tuple >
+auto apply( F&& fn, Tuple&& tpl )
+    -> decltype(
+        detail::apply_impl(
+            std::forward<F>( fn  )
+            , std::forward<Tuple>( tpl )
+            , make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{}
+        )
+    )
+{
+    return detail::apply_impl(
+        std::forward<F>(fn)
+        , std::forward<Tuple>(tpl)
+        , make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type >::value>{}
+    );
+}
+
+}} // namespace nonstd::apply_lite
+
+// Bring apply() into scope nonstd:
+
+namespace nonstd {
+
+using apply_lite::apply;
+
+}
+
+#else // invoke_CPP11_OR_GREATER - apply()
+
+#pragma message ("*** nonstd::appl(): No implementation for C++98.")
+
+#endif // invoke_USES_STD_INVOKE - apply()
 
 #endif // NONSTD_INVOKE_LITE_HPP
