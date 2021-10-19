@@ -11,7 +11,7 @@ cmake_minimum_required( VERSION 3.8 FATAL_ERROR )
 
 project(
     invoke_lite
-    VERSION 9.9.9
+    VERSION 0.0.0
 #   DESCRIPTION "INVOKE"
 #   HOMEPAGE_URL "https://github.com/martinmoene/invoke-lite"
     LANGUAGES CXX )
