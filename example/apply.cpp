@@ -20,7 +20,7 @@ T add_generic(T first, T second)
     return first + second;
 }
 
-auto add_lambda = [](int first, int second)
+auto add_lambda = [](float first, float second)
 {
     return first + second;
 };
@@ -45,7 +45,7 @@ int main()
          nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f))    << '\n';
 
 #else
-    std::cout << "This example needs C++11\n";
+    std::cout << "This example requires C++11\n";
 #endif // invoke_CPP17_OR_GREATER
  }
 
