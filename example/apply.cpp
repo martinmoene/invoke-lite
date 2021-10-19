@@ -5,64 +5,47 @@
 #include <iostream>
 #include <utility>
 
-#if invoke_CPP14_OR_GREATER
+#if invoke_CPP11_OR_GREATER
 
 #include <tuple>
 
 int add(int first, int second)
-{ 
+{
     return first + second;
 }
- 
+
 template<typename T>
 T add_generic(T first, T second)
-{ 
+{
     return first + second;
 }
 
-auto add_lambda = [](auto first, auto second)
-{ 
+auto add_lambda = [](int first, int second)
+{
     return first + second;
 };
- 
-#if invoke_CPP17_OR_GREATER
 
-template<typename... Ts>
-std::ostream& operator<<(std::ostream& os, std::tuple<Ts...> const& theTuple)
-{
-    std::apply
-    (
-        [&os](Ts const&... tupleArgs)
-        {
-            os << '[';
-            std::size_t n{0};
-            ((os << tupleArgs << (++n != sizeof...(Ts) ? ", " : "")), ...);
-            os << ']';
-        }, theTuple
-    );
-    return os;
-}
-
-#endif // invoke_CPP17_OR_GREATER
-#endif // invoke_CPP14_OR_GREATER
+#endif // invoke_CPP11_OR_GREATER
 
 int main()
 {
-#if invoke_CPP17_OR_GREATER
+#if invoke_CPP11_OR_GREATER
 
     // OK
-    std::cout << nonstd::apply(add, std::pair(1, 2)) << '\n';
- 
+    std::cout <<
+        "nonstd::apply(add, std::pair<int, int>(1, 2)): " <<
+         nonstd::apply(add, std::pair<int, int>(1, 2))    << '\n';
+
     // Error: can't deduce the function type
-    // std::cout << std::apply(add_generic, std::make_pair(2.0f, 3.0f)) << '\n'; 
- 
-    // OK
-    std::cout << nonstd::apply(add_lambda, std::pair(2.0f, 3.0f)) << '\n'; 
- 
-    // advanced example
-    std::tuple myTuple(25, "Hello", 9.31f, 'c');
-    std::cout << myTuple << '\n';
+    // std::cout << std::apply(add_generic, std::make_pair(2.0f, 3.0f)) << '\n';
 
+    // OK
+    std::cout <<
+        "nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f)): " <<
+         nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f))    << '\n';
+
+#else
+    std::cout << "This example needs C++11\n";
 #endif // invoke_CPP17_OR_GREATER
  }
 
