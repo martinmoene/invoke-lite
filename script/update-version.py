@@ -35,19 +35,19 @@ table = (
 #        , r'\Invoke_lite_version\s+=\s+"([0-9]+\.[0-9]+\.[0-9]+)"\s*$'
 #        , 'Invoke_lite_version = "{major}.{minor}.{patch}"\n' )
 
-    , ( 'conanfile.py'
-        , r'version\s+=\s+"([0-9]+\.[0-9]+\.[0-9]+)"\s*$'
-        , 'version = "{major}.{minor}.{patch}"' )
+#    , ( 'conanfile.py'
+#        , r'version\s+=\s+"([0-9]+\.[0-9]+\.[0-9]+)"\s*$'
+#        , 'version = "{major}.{minor}.{patch}"' )
 
-    , ( 'include/nonstd/any.hpp'
+    , ( 'include/nonstd/invoke.hpp'
         , r'\#define\s+Invoke_lite_MAJOR\s+[0-9]+\s*$'
         , '#define Invoke_lite_MAJOR  {major}' )
 
-    , ( 'include/nonstd/any.hpp'
+    , ( 'include/nonstd/invoke.hpp'
         , r'\#define\s+Invoke_lite_MINOR\s+[0-9]+\s*$'
         , '#define Invoke_lite_MINOR  {minor}' )
 
-    , ( 'include/nonstd/any.hpp'
+    , ( 'include/nonstd/invoke.hpp'
         , r'\#define\s+Invoke_lite_PATCH\s+[0-9]+\s*$'
         , '#define Invoke_lite_PATCH  {patch}\n' )
 )
