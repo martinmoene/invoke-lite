@@ -25,6 +25,7 @@ set( OPTIONS "" )
 # Sources (.cpp), normal and no-exception, and their base names:
 
 set( SOURCES
+    apply.cpp
     invoke.cpp
 )
 
@@ -74,6 +75,7 @@ function( make_target name no_exceptions )
     add_executable             ( ${PROGRAM}-${name} ${name}.cpp )
     target_include_directories ( ${PROGRAM}-${name} PRIVATE ../../variant-lite/include )
     target_link_libraries      ( ${PROGRAM}-${name} PRIVATE ${PACKAGE} )
+    set_property               ( TARGET ${PROGRAM}-${name} PROPERTY CXX_STANDARD 17 )   # TODO here for now
     if ( no_exceptions )
         target_compile_options ( ${PROGRAM}-${name} PRIVATE ${NO_EXCEPTIONS_OPTIONS} )
     else()
