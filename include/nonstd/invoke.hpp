@@ -414,7 +414,8 @@ template< typename F, typename... ArgTypes >
 struct invoke_result : detail::invoke_result< void, F, ArgTypes...> {};
 
 template< typename F, typename... Args >
-typename invoke_result< F, Args...>::type invoke( F && f, Args &&... args )
+typename invoke_result< F, Args...>::type
+invoke( F && f, Args &&... args )
 // noexcept( detail::is_nothrow_invocable<F, Args...>::value )
 {
     return detail::INVOKE( std::forward<F>( f ), std::forward<Args>( args )...);
