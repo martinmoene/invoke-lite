@@ -1,4 +1,4 @@
-# invoke lite: C++17's invoke for C++98 and later and apply for C++11 and later
+# invoke lite: C++17's invoke() for C++98 and later and apply() for C++11 and later
 
 A work in its infancy. Suggested and contributed to by Peter Featherstone.
 
