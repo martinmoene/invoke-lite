@@ -31,14 +31,10 @@ struct Bar
     }
 };
 
-
-#if invoke_CPP11_OR_GREATER
-
-void print_exc() noexcept( false )
+void print_exc() invoke_noexcept_op( false )
 {
     std::cout << "print_exc() noexcept(false)\n";
 }
-#endif
 
 void print_noarg()
 {
@@ -61,9 +57,7 @@ struct printer
 int main()
 {
     // invoke a free function:
-#if invoke_CPP11_OR_GREATER
     std::cout << "nonstd::invoke( print_exc ): "; nonstd::invoke( print_exc );
-#endif
     std::cout << "nonstd::invoke( print_noarg ): "; nonstd::invoke( print_noarg   );
     std::cout << "nonstd::invoke( print_arg, -9 ): " << nonstd::invoke( print_arg, -9 ) << "\n";
 
