@@ -703,7 +703,7 @@ using apply_lite::apply;
 
 #else // invoke_CPP11_OR_GREATER - apply()
 
-#pragma message ("*** nonstd::appl(): No implementation for C++98.")
+#pragma message ("*** nonstd::apply(): No implementation for C++98.")
 
 #endif // invoke_USES_STD_INVOKE - apply()
 
