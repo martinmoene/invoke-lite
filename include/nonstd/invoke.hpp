@@ -39,7 +39,7 @@
 // invoke selection and configuration:
 
 #ifndef  invoke_CONFIG_SELECT_INVOKE
-# define invoke_CONFIG_SELECT_INVOKE  ( invoke_HAVE_STD_INVOKE ? invoke_invoke_STD : invoke_invoke_NONSTD )
+# define invoke_CONFIG_SELECT_INVOKE  invoke_invoke_DEFAULT
 #endif
 
 #ifndef  invoke_USE_ALTERNATE_IMPL
@@ -78,17 +78,13 @@
 
 // Use C++17 std::invoke if available and requested:
 
-#if invoke_CPP17_OR_GREATER && defined(__has_include )
-# if __has_include( <invoke> )
-#  define invoke_HAVE_STD_INVOKE  1
-# else
-#  define invoke_HAVE_STD_INVOKE  0
-# endif
+#if invoke_CPP17_OR_GREATER
+# define  invoke_HAVE_STD_INVOKE  1
 #else
 # define  invoke_HAVE_STD_INVOKE  0
 #endif
 
-#define  invoke_USES_STD_INVOKE  ( (invoke_CONFIG_SELECT_INVOKE == invoke_invoke_STD) || ((invoke_CONFIG_SELECT_INVOKE == invoke_invoke_DEFAULT) && invoke_HAVE_STD_INVOKE) )
+#define invoke_USES_STD_INVOKE  ( (invoke_CONFIG_SELECT_INVOKE == invoke_invoke_STD) || ((invoke_CONFIG_SELECT_INVOKE == invoke_invoke_DEFAULT) && invoke_HAVE_STD_INVOKE) )
 
 //
 // Use standard C++17 version:
