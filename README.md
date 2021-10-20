@@ -22,13 +22,27 @@ A work in its infancy. Suggested and contributed to by Peter Featherstone.
 ## Example usage
 
 ```Cpp
-TBD
+#include "nonstd/invoke.hpp"
+#include <utility>
+
+int add(int first, int second)
+{
+    return first + second;
+}
+
+int main()
+{
+    return
+        + nonstd::invoke(add, 1, 2)
+        + nonstd::apply(add, std::pair<int, int>(1, 2));
+}
 ```
 
 ### Compile and run
 
 ```Text
-TBD
+g++ -std=c++11 -Wall -I../include -o 00-basic.exe 00-basic.cpp && ./00-basic.exe || echo $?
+6
 ```
 
 ## In a nutshell

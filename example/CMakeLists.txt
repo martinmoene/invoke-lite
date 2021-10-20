@@ -27,6 +27,7 @@ set( OPTIONS "" )
 set( SOURCES
     apply.cpp
     invoke.cpp
+    00-basic.cpp
 )
 
 set( SOURCES_NE
