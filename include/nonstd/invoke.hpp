@@ -174,43 +174,9 @@ namespace nonstd {
 
 // Presence of C++11 language features:
 
-#define invoke_HAVE_CONSTEXPR_11           invoke_CPP11_140
-#define invoke_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG \
-                                        invoke_CPP11_120
-#define invoke_HAVE_INITIALIZER_LIST       invoke_CPP11_120
-#define invoke_HAVE_NOEXCEPT               invoke_CPP11_140
-#define invoke_HAVE_NULLPTR                invoke_CPP11_100
 #define invoke_HAVE_TYPE_TRAITS            invoke_CPP11_90
-#define invoke_HAVE_STATIC_ASSERT          invoke_CPP11_100
-#define invoke_HAVE_ADD_CONST              invoke_CPP11_90
-#define invoke_HAVE_OVERRIDE               invoke_CPP11_90
-#define invoke_HAVE_REMOVE_REFERENCE       invoke_CPP11_90
-
-#define invoke_HAVE_TR1_ADD_CONST          (!! invoke_COMPILER_GNUC_VERSION )
-#define invoke_HAVE_TR1_REMOVE_REFERENCE   (!! invoke_COMPILER_GNUC_VERSION )
-#define invoke_HAVE_TR1_TYPE_TRAITS        (!! invoke_COMPILER_GNUC_VERSION )
-
-// Presence of C++11 language features:
-
-#define invoke_HAVE_CONSTEXPR_11           invoke_CPP11_140
-#define invoke_HAVE_DEFAULT_FUNCTION_TEMPLATE_ARG \
-                                        invoke_CPP11_120
-#define invoke_HAVE_INITIALIZER_LIST       invoke_CPP11_120
-#define invoke_HAVE_NOEXCEPT               invoke_CPP11_140
-#define invoke_HAVE_NULLPTR                invoke_CPP11_100
-#define invoke_HAVE_TYPE_TRAITS            invoke_CPP11_90
-#define invoke_HAVE_STATIC_ASSERT          invoke_CPP11_100
-#define invoke_HAVE_ADD_CONST              invoke_CPP11_90
-#define invoke_HAVE_OVERRIDE               invoke_CPP11_90
-#define invoke_HAVE_REMOVE_REFERENCE       invoke_CPP11_90
-
-#define invoke_HAVE_TR1_ADD_CONST          (!! invoke_COMPILER_GNUC_VERSION )
-#define invoke_HAVE_TR1_REMOVE_REFERENCE   (!! invoke_COMPILER_GNUC_VERSION )
-#define invoke_HAVE_TR1_TYPE_TRAITS        (!! invoke_COMPILER_GNUC_VERSION )
 
 // Presence of C++14 language features:
-
-#define invoke_HAVE_CONSTEXPR_14           invoke_CPP14_000
 
 // Presence of C++17 language features:
 
@@ -218,40 +184,10 @@ namespace nonstd {
 
 // Presence of C++ language features:
 
-#if invoke_HAVE_CONSTEXPR_11
-# define invoke_constexpr constexpr
-#else
-# define invoke_constexpr /*constexpr*/
-#endif
-
-#if invoke_HAVE_CONSTEXPR_14
-# define invoke_constexpr14 constexpr
-#else
-# define invoke_constexpr14 /*constexpr*/
-#endif
-
-#if invoke_HAVE_NOEXCEPT
-# define invoke_noexcept noexcept
-#else
-# define invoke_noexcept /*noexcept*/
-#endif
-
-#if invoke_HAVE_NULLPTR
-# define invoke_nullptr nullptr
-#else
-# define invoke_nullptr NULL
-#endif
-
 #if invoke_HAVE_NODISCARD
 # define invoke_nodiscard [[nodiscard]]
 #else
 # define invoke_nodiscard /*[[nodiscard]]*/
-#endif
-
-#if invoke_HAVE_OVERRIDE
-# define invoke_override override
-#else
-# define invoke_override /*override*/
 #endif
 
 // additional includes:
@@ -260,14 +196,6 @@ namespace nonstd {
 # include <cassert>
 #else
 # include <typeinfo>
-#endif
-
-#if ! invoke_HAVE_NULLPTR
-# include <cstddef>
-#endif
-
-#if invoke_HAVE_INITIALIZER_LIST
-# include <initializer_list>
 #endif
 
 #if invoke_HAVE_TYPE_TRAITS
