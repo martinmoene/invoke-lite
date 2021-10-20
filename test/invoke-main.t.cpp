@@ -119,7 +119,7 @@ CASE( "presence of C++ language features" "[.stdlanguage]" )
 #if invoke_USES_STD_INVOKE
     std::cout << "(C++ language features not available: using std::string_view)\n";
 #else
-    invoke_PRESENT( invoke_HAVE_CONSTEXPR_11 );
+    // invoke_PRESENT( invoke_HAVE_CONSTEXPR_11 );
     // invoke_PRESENT( invoke_HAVE_DEFAULT_FN_TPL_ARGS );
     // invoke_PRESENT( invoke_HAVE_EXPLICIT_CONVERSION );
     invoke_PRESENT( invoke_HAVE_NODISCARD );
