@@ -1,4 +1,4 @@
-// invode-lite/example/apply.cpp
+// invoke-lite/example/apply.cpp
 
 #include "nonstd/invoke.hpp"
 
