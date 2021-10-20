@@ -174,15 +174,24 @@ namespace nonstd {
 
 // Presence of C++11 language features:
 
-#define invoke_HAVE_TYPE_TRAITS            invoke_CPP11_90
+#define invoke_HAVE_NOEXCEPT                invoke_CPP11_140
+#define invoke_HAVE_TYPE_TRAITS             invoke_CPP11_90
 
 // Presence of C++14 language features:
 
 // Presence of C++17 language features:
 
-#define invoke_HAVE_NODISCARD              invoke_CPP17_000
+#define invoke_HAVE_NODISCARD               invoke_CPP17_000
 
 // Presence of C++ language features:
+
+#if invoke_HAVE_NOEXCEPT && !invoke_CONFIG_NO_EXCEPTIONS
+# define invoke_noexcept noexcept
+# define invoke_noexcept_op(expr) noexcept(expr)
+#else
+# define invoke_noexcept /*noexcept*/
+# define invoke_noexcept_op(expr) /*noexcept(expr)*/
+#endif
 
 #if invoke_HAVE_NODISCARD
 # define invoke_nodiscard [[nodiscard]]
