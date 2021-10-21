@@ -137,7 +137,25 @@ The version of *invoke lite* is available via tag `[.version]`. The following ta
 <p>
 
 ```Text
-invoke: ...
+invoke: a free function, no arguments
+invoke: a free function, no arguments, noexcept(false) (C++11)
+invoke: a free function, 1 argument
+invoke: a free function, 2 arguments
+invoke: a member function, no arguments
+invoke: a member function, 1 argument
+invoke: a member function, 1 const ref argument
+invoke: a non-const member function, 1 argument
+invoke: a member function, changing its reference argument
+invoke: (access) a data member - via const object ref
+invoke: (access) a data member - via const object ptr
+invoke: (access) a data member - via non-const object ref
+invoke: (access) a data member - via non-const object ptr
+invoke: change an invoked (accessed) data member - via non-const object ref
+invoke: change an invoked (accessed) data member - via non-const object ptr
+invoke: a function object, no arguments
+invoke: a function object, 1 argument
+invoke: a lambda, no arguments
+invoke: a lambda, 1 argument
 tweak header: Reads tweak header if supported [tweak]
 ```
 

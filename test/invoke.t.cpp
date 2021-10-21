@@ -51,6 +51,11 @@ struct holder
     {
         return v + a;
     }
+
+    void change_arg( int & a )
+    {
+        a = v;
+    }
 };
 
 struct functor
@@ -120,25 +125,58 @@ CASE("invoke: a non-const member function, 1 argument")
 
 CASE("invoke: a member function, changing its reference argument")
 {
-    // invoke a member function, changing its reference argument:
-    // Bar bar; int arg = 7;
-    // std::cout << "nonstd::invoke( &Bar::change_arg, bar, arg ): "; nonstd::invoke( &Bar::change_arg, bar, arg ); std::cout << "; original arg: " << arg << "\n";
+    int arg = 7;
+    holder v(42);
+
+    nonstd::invoke( &holder::change_arg, v, arg );
+
+    EXPECT( arg == 42 );
 }
 
-CASE("invoke: (access) a data member")
+CASE("invoke: (access) a data member - via const object ref")
 {
-    // invoke (access) a data member:
-    // std::cout << "Access member data via     const object ref: nonstd::invoke(&Foo::num_,  foo): " << nonstd::invoke(&Foo::num_,  foo) << "\n";
-    // std::cout << "Access member data via     const object ptr: nonstd::invoke(&Foo::num_, &foo): " << nonstd::invoke(&Foo::num_, &foo) << "\n";
-    // std::cout << "Access member data via non-const object ref: nonstd::invoke(&Foo::num_,  ncf): " << nonstd::invoke(&Foo::num_,  ncf) << "\n";
-    // std::cout << "Access member data via non-const object ptr: nonstd::invoke(&Foo::num_, &ncf): " << nonstd::invoke(&Foo::num_, &ncf) << "\n";
+    const holder h(42);
+
+    EXPECT( nonstd::invoke( &holder::v, h ) == 42 );
 }
 
-CASE("invoke: change an invoked (accessed) data member:")
+CASE("invoke: (access) a data member - via const object ptr")
 {
-    // change an invoked (accessed) data member:
-    // std::cout << "Change member data via non-const object ref: nonstd::invoke(&Foo::num_,  ncf) = 77: " << (nonstd::invoke(&Foo::num_,  ncf) = 77) << "\n";
-    // std::cout << "Change member data via non-const object ptr: nonstd::invoke(&Foo::num_, &ncf) = 88: " << (nonstd::invoke(&Foo::num_, &ncf) = 88) << "\n";
+    const holder h(42);
+
+    EXPECT( nonstd::invoke( &holder::v, &h ) == 42 );
+}
+
+CASE("invoke: (access) a data member - via non-const object ref")
+{
+    holder h(42);
+
+    EXPECT( nonstd::invoke( &holder::v, h ) == 42 );
+}
+
+CASE("invoke: (access) a data member - via non-const object ptr")
+{
+    holder h(42);
+
+    EXPECT( nonstd::invoke( &holder::v, &h ) == 42 );
+}
+
+CASE("invoke: change an invoked (accessed) data member - via non-const object ref")
+{
+    holder h(42);
+
+    nonstd::invoke( &holder::v, h ) = 7;
+
+    EXPECT( h.v == 7 );
+}
+
+CASE("invoke: change an invoked (accessed) data member - via non-const object ptr")
+{
+    holder h(42);
+
+    nonstd::invoke( &holder::v,  &h ) = 7;
+
+    EXPECT( h.v == 7 );
 }
 
 CASE("invoke: a function object, no arguments")
