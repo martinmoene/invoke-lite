@@ -13,8 +13,9 @@ int main()
 {
     return
         + nonstd::invoke(add, 1, 2)
-        + nonstd::apply(add, std::pair<int, int>(1, 2))
-        + nonstd::apply(add, std::array<int, 2>({1, 2}));
+        + nonstd::apply(add, std::pair <int, int>(1, 2))
+        + nonstd::apply(add, std::tuple<int, int>(1, 2))
+        + nonstd::apply(add, std::array<int,  2>({1, 2}));
 }
 
 // MSVC 2015 (VC140/1900) and newer

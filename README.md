@@ -35,8 +35,9 @@ int main()
 {
     return
         + nonstd::invoke(add, 1, 2)
-        + nonstd::apply(add, std::pair<int, int>(1, 2))
-        + nonstd::apply(add, std::array<int, 2>({1, 2}));
+        + nonstd::apply(add, std::pair <int, int>(1, 2))
+        + nonstd::apply(add, std::tuple<int, int>(1, 2))
+        + nonstd::apply(add, std::array<int,  2>({1, 2}));
 }
 ```
 
@@ -44,7 +45,7 @@ int main()
 
 ```Text
 g++ -std=c++11 -Wall -I../include -o 00-basic.exe 00-basic.cpp && ./00-basic.exe || echo $?
-9
+12
 ```
 
 ## In a nutshell
