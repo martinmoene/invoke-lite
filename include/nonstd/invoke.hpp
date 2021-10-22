@@ -100,19 +100,13 @@ namespace nonstd {
     using std::invoke;
 }
 
-#elif invoke_CPP11_OR_GREATER
-#pragma message ("*** Using nonstd::invoke - C++11")
+#else // invoke_USES_STD_INVOKE
+
+#pragma message ("*** Using nonstd::invoke - C++98/C++11")
 
 //
 // C++11, code taken from http://en.cppreference.com/w/cpp/types/result_of:
 //
-
-#include <type_traits>
-#include <utility>
-
-#if invoke_USE_ALTERNATE_IMPL   // see issue #1
-# include <functional>
-#endif
 
 // Compiler versions:
 //
@@ -212,6 +206,16 @@ namespace nonstd {
 #elif invoke_HAVE_TR1_TYPE_TRAITS
 # include <tr1/type_traits>
 #endif
+
+#if invoke_USE_ALTERNATE_IMPL   // see issue #1
+# include <functional>
+#endif
+
+#include <utility>  // std::forward
+
+#if invoke_CPP11_OR_GREATER
+
+#pragma message ("*** Using nonstd::invoke - C++11")
 
 namespace nonstd {
 namespace detail {
@@ -528,7 +532,8 @@ using std98::invoke;
 }
 
 
-#endif // invoke_CPP17_OR_GREATER, invoke_CPP11_OR_GREATER - invoke()
+#endif  // invoke_CPP17_OR_GREATER, invoke_CPP11_OR_GREATER - invoke()
+#endif  // invoke_USES_STD_INVOKE - invoke()
 
 //
 // nonstd::apply():
@@ -553,6 +558,7 @@ namespace nonstd {
 #pragma message ("*** Using nonstd::invoke - C++11")
 
 #include <array>
+#include <tuple>
 
 namespace nonstd { namespace apply_lite {
 
