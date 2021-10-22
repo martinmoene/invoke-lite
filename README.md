@@ -158,6 +158,12 @@ invoke: a function object, no arguments
 invoke: a function object, 1 argument
 invoke: a lambda, no arguments
 invoke: a lambda, 1 argument
+apply: a function object, std::pair of 2 arguments (C++11)
+apply: a function object, std::tuple of 2 arguments (C++11)
+apply: a function object, std::array of 2 arguments (C++11)
+apply: a lambda, std::pair of 2 arguments (C++11)
+apply: a lambda, std::tuple of 2 arguments (C++11)
+apply: a lambda, std::array of 2 arguments (C++11)
 tweak header: Reads tweak header if supported [tweak]
 ```
 

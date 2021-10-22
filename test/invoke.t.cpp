@@ -204,8 +204,59 @@ CASE("invoke: a lambda, 1 argument")
 // apply():
 //
 
-// The tuple need not be std::tuple, and instead may be anything that supports
-// std::get and std::tuple_size; in particular, std::array and std::pair may be used.
+CASE("apply: a function object, std::pair of 2 arguments (C++11)")
+{
+#if invoke_CPP11_OR_GREATER
+    EXPECT( nonstd::apply( add, std::pair<int, int>(1, 2) ) == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a function object, std::tuple of 2 arguments (C++11)")
+{
+#if invoke_CPP11_OR_GREATER
+    EXPECT( nonstd::apply( add, std::tuple<int, int>(1, 2) ) == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a function object, std::array of 2 arguments (C++11)")
+{
+#if invoke_CPP11_OR_GREATER
+    EXPECT( nonstd::apply( add, std::array<int,2>({ 1, 2}) ) == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a lambda, std::pair of 2 arguments (C++11)")
+{
+#if invoke_CPP11_OR_GREATER
+    EXPECT( nonstd::apply( [](int a, int b){ return a + b; }, std::pair<int, int>(1, 2)) == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a lambda, std::tuple of 2 arguments (C++11)")
+{
+#if invoke_CPP11_OR_GREATER
+    EXPECT( nonstd::apply( add, std::tuple<int, int>(1, 2) ) == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a lambda, std::array of 2 arguments (C++11)")
+{
+#if invoke_CPP11_OR_GREATER
+    EXPECT( nonstd::apply( [](int a, int b){ return a + b; }, std::array<int,2>({ 1, 2})) == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
 
 //
 // Other:
