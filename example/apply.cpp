@@ -33,16 +33,22 @@ int main()
 
     // OK
     std::cout <<
-        "nonstd::apply(add, std::pair<int, int>(1, 2)): " <<
-         nonstd::apply(add, std::pair<int, int>(1, 2))    << '\n';
+        "\nnonstd::apply(add, std::pair<int, int>(1, 2)) : " <<
+           nonstd::apply(add, std::pair<int, int>(1, 2))     <<
+        "\nnonstd::apply(add, std::array<int,2>({ 1, 2})): " <<
+           nonstd::apply(add, std::array<int,2>({ 1, 2}))    <<
+         '\n';
 
     // Error: can't deduce the function type
     // std::cout << std::apply(add_generic, std::make_pair(2.0f, 3.0f)) << '\n';
 
     // OK
     std::cout <<
-        "nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f)): " <<
-         nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f))    << '\n';
+        "\nnonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f)) : " <<
+           nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f))     <<
+        "\nnonstd::apply(add_lambda, std::array<float,  2>({ 2.0f, 3.0f})): " <<
+           nonstd::apply(add_lambda, std::array<float,  2>({ 2.0f, 3.0f}))    <<
+         '\n';
 
 #else
     std::cout << "This example requires C++11\n";
