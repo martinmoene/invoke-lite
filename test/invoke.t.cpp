@@ -1,8 +1,9 @@
 #include "invoke-main.t.hpp"
 
+#ifndef  invoke_noexcept_op
+# define invoke_noexcept_op(expr) noexcept(expr)
+#endif
 namespace {
-
-
 
 int f42()
 {
@@ -202,6 +203,9 @@ CASE("invoke: a lambda, 1 argument")
 //
 // apply():
 //
+
+// The tuple need not be std::tuple, and instead may be anything that supports
+// std::get and std::tuple_size; in particular, std::array and std::pair may be used.
 
 //
 // Other:
