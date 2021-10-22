@@ -59,8 +59,12 @@ namespace std {
 
 }
 
-#define   lest_FEATURE_AUTO_REGISTER 1
-#include "lest.hpp"
+#if 1
+# define   lest_FEATURE_AUTO_REGISTER 1
+# include "lest.hpp"
+#else
+# include "lest_cpp03.hpp"  // Fails with `EXPECT( nonstd::invoke( add, 1, 2 ) == 3 );`
+#endif
 
 extern lest::tests & specification();
 
