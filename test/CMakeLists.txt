@@ -191,21 +191,16 @@ if( HAS_CPP17_FLAG )
 
     if( INVOKE_LITE_OPT_SELECT_STD )
         set( WHICH invoke_INVOKE_STD )
+        message( STATUS "Using std::invoke(), std::apply(): ${WHICH}")
     elseif( INVOKE_LITE_OPT_SELECT_NONSTD )
         set( WHICH invoke_INVOKE_NONSTD )
+        message( STATUS "Using nonstd::invoke(), nonstd::apply(): ${WHICH}")
     endif()
 
-    # set( WHICH invoke_CONFIG_SELECT_INVOKE_DEFAULT )
-    # if( INVOKE_LITE_OPT_SELECT_STD )
-    #     set( WHICH invoke_CONFIG_SELECT_INVOKE_STD )
-    # elseif( INVOKE_LITE_OPT_SELECT_NONSTD )
-    #     set( WHICH invoke_CONFIG_SELECT_INVOKE_NONSTD )
-    # endif()
-
-    target_compile_definitions( ${PROGRAM}-cpp17.t PRIVATE invoke_CONFIG_SELECT_INVOKE=${WHICH} )
+    target_compile_definitions( ${PROGRAM}-cpp17.t PRIVATE -Dinvoke_CONFIG_SELECT_INVOKE=${WHICH} )
 
     if( HAS_CPPLATEST_FLAG )
-        target_compile_definitions( ${PROGRAM}-cpplatest.t PRIVATE invoke_CONFIG_SELECT_INVOKE=${WHICH} )
+        target_compile_definitions( ${PROGRAM}-cpplatest.t PRIVATE -Dinvoke_CONFIG_SELECT_INVOKE=${WHICH} )
     endif()
 endif()
 
