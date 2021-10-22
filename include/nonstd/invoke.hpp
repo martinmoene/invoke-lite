@@ -534,7 +534,7 @@ using std98::invoke;
 // nonstd::apply():
 //
 
-// C++11 implementation contributed by Peter Featherstone, @pfeatherstone
+// C++11 implementation contributed by Peter Featherstone, @pfeatherstone.
 
 #if invoke_USES_STD_INVOKE
 
@@ -551,6 +551,8 @@ namespace nonstd {
 #elif invoke_CPP11_OR_GREATER
 
 #pragma message ("*** Using nonstd::invoke - C++11")
+
+#include <array>
 
 namespace nonstd { namespace apply_lite {
 
@@ -598,8 +600,8 @@ using std::index_sequence_for;
 
 namespace detail {
 
-template<typename F, typename Tuple, std::size_t... I>
-auto apply_impl(F&& fn, Tuple&& tpl, index_sequence<I...>)
+template< typename F, typename Tuple, std::size_t... I >
+auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
     -> decltype( invoke( std::forward<F>(fn), std::get<I>(std::forward<Tuple>(tpl) )...) )
 {
     return invoke( std::forward<F>(fn), std::get<I>( std::forward<Tuple>(tpl) )...);
@@ -608,7 +610,7 @@ auto apply_impl(F&& fn, Tuple&& tpl, index_sequence<I...>)
 } // namespace detail
 
 template< typename F, typename Tuple >
-auto apply( F&& fn, Tuple&& tpl )
+auto apply( F&& fn, Tuple && tpl )
     -> decltype(
         detail::apply_impl(
             std::forward<F>( fn  )
