@@ -531,7 +531,6 @@ using std98::invoke;
 
 }
 
-
 #endif  // invoke_CPP17_OR_GREATER, invoke_CPP11_OR_GREATER - invoke()
 #endif  // invoke_USES_STD_INVOKE - invoke()
 
