@@ -23,6 +23,7 @@ A work in its infancy. Suggested and contributed to by Peter Featherstone.
 
 ```Cpp
 #include "nonstd/invoke.hpp"
+#include <array>
 #include <utility>
 
 int add(int first, int second)
@@ -34,7 +35,8 @@ int main()
 {
     return
         + nonstd::invoke(add, 1, 2)
-        + nonstd::apply(add, std::pair<int, int>(1, 2));
+        + nonstd::apply(add, std::pair<int, int>(1, 2))
+        + nonstd::apply(add, std::array<int, 2>({1, 2}));
 }
 ```
 
@@ -42,7 +44,7 @@ int main()
 
 ```Text
 g++ -std=c++11 -Wall -I../include -o 00-basic.exe 00-basic.cpp && ./00-basic.exe || echo $?
-6
+9
 ```
 
 ## In a nutshell
