@@ -187,13 +187,20 @@ endif()
 # with C++17, honour explicit request for std::invoke or nonstd::invoke:
 
 if( HAS_CPP17_FLAG )
-    set( WHICH invoke_CONFIG_SELECT_INVOKE_DEFAULT )
+    set( WHICH invoke_INVOKE_DEFAULT )
 
     if( INVOKE_LITE_OPT_SELECT_STD )
-        set( WHICH invoke_CONFIG_SELECT_INVOKE_STD )
+        set( WHICH invoke_INVOKE_STD )
     elseif( INVOKE_LITE_OPT_SELECT_NONSTD )
-        set( WHICH invoke_CONFIG_SELECT_INVOKE_NONSTD )
+        set( WHICH invoke_INVOKE_NONSTD )
     endif()
+
+    # set( WHICH invoke_CONFIG_SELECT_INVOKE_DEFAULT )
+    # if( INVOKE_LITE_OPT_SELECT_STD )
+    #     set( WHICH invoke_CONFIG_SELECT_INVOKE_STD )
+    # elseif( INVOKE_LITE_OPT_SELECT_NONSTD )
+    #     set( WHICH invoke_CONFIG_SELECT_INVOKE_NONSTD )
+    # endif()
 
     target_compile_definitions( ${PROGRAM}-cpp17.t PRIVATE invoke_CONFIG_SELECT_INVOKE=${WHICH} )
 

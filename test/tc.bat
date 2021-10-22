@@ -11,20 +11,24 @@ set unit_file=invoke
 set std=c++11
 if NOT "%1" == "" set std=%1 & shift
 
-set select_invoke=invoke_CONFIG_SELECT_INVOKE_NONSTD
-if NOT "%1" == "" set select_invoke=%1 & shift
+set UCAP=%unit%
+call :toupper UCAP
+
+set unit_select=%unit%_%UCAP%_NONSTD
+::set unit_select=%unit%_CONFIG_SELECT_%UCAP%_NONSTD
+if NOT "%1" == "" set unit_select=%1 & shift
 
 set args=%1 %2 %3 %4 %5 %6 %7 %8 %9
 
 set  clang=clang
 
 call :CompilerVersion version
-echo %clang% %version%: %std% %select_invoke% %args%
+echo %clang% %version%: %std% %unit_select% %args%
 
 set unit_config=^
     -Dinvoke_INVOKE_HEADER=\"nonstd/invoke.hpp\" ^
     -Dinvoke_TEST_NODISCARD=0 ^
-    -Dinvoke_CONFIG_SELECT_INVOKE=%select_invoke%
+    -Dinvoke_CONFIG_SELECT_INVOKE=%unit_select%
 
 rem -flto / -fwhole-program
 set  optflags=-O2

@@ -50,7 +50,7 @@ int main()
  }
 
 // MSVC 20xx (VCxx) and newer
-// cl -EHsc -Dinvoke_CONFIG_SELECT_INVOKE=invoke_invoke_NONSTD -I../include apply.cpp && apply.exe
+// cl -EHsc -Dinvoke_CONFIG_SELECT_INVOKE=invoke_INVOKE_NONSTD -I../include apply.cpp && apply.exe
 
 // GNUC, std=c++98, c++11, c++17
-// g++ -std=c++11 -Dinvoke_CONFIG_SELECT_INVOKE=invoke_invoke_NONSTD -I../include -o apply.exe apply.cpp && apply.exe
+// g++ -std=c++11 -Dinvoke_CONFIG_SELECT_INVOKE=invoke_INVOKE_NONSTD -I../include -o apply.exe apply.cpp && apply.exe

@@ -18,7 +18,7 @@ int main()
 }
 
 // MSVC 2015 (VC140/1900) and newer
-// cl -nologo -EHsc -Dinvoke_CONFIG_SELECT_INVOKE=invoke_invoke_NONSTD -I../include 00-basic.cpp && 00-basic.exe
+// cl -nologo -EHsc -Dinvoke_CONFIG_SELECT_INVOKE=invoke_INVOKE_NONSTD -I../include 00-basic.cpp && 00-basic.exe
 
 // GNUC, std=c++98, c++11, c++17
-// g++ -std=c++11 -Dinvoke_CONFIG_SELECT_INVOKE=invoke_invoke_NONSTD -I../include -o 00-basic.exe 00-basic.cpp && 00-basic.exe
+// g++ -std=c++11 -Dinvoke_CONFIG_SELECT_INVOKE=invoke_INVOKE_NONSTD -I../include -o 00-basic.exe 00-basic.cpp && 00-basic.exe

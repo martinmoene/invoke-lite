@@ -20,9 +20,9 @@
 
 // invoke-lite configuration:
 
-#define invoke_invoke_DEFAULT  0
-#define invoke_invoke_NONSTD   1
-#define invoke_invoke_STD      2
+#define invoke_INVOKE_DEFAULT  0
+#define invoke_INVOKE_NONSTD   1
+#define invoke_INVOKE_STD      2
 
 // tweak header support:
 
@@ -39,7 +39,7 @@
 // invoke selection and configuration:
 
 #ifndef  invoke_CONFIG_SELECT_INVOKE
-# define invoke_CONFIG_SELECT_INVOKE  invoke_invoke_DEFAULT
+# define invoke_CONFIG_SELECT_INVOKE  invoke_INVOKE_DEFAULT
 #endif
 
 #ifndef  invoke_USE_ALTERNATE_IMPL
@@ -84,7 +84,7 @@
 # define  invoke_HAVE_STD_INVOKE  0
 #endif
 
-#define invoke_USES_STD_INVOKE  ( (invoke_CONFIG_SELECT_INVOKE == invoke_invoke_STD) || ((invoke_CONFIG_SELECT_INVOKE == invoke_invoke_DEFAULT) && invoke_HAVE_STD_INVOKE) )
+#define invoke_USES_STD_INVOKE  ( (invoke_CONFIG_SELECT_INVOKE == invoke_INVOKE_STD) || ((invoke_CONFIG_SELECT_INVOKE == invoke_INVOKE_DEFAULT) && invoke_HAVE_STD_INVOKE) )
 
 //
 // Use standard C++17 version:
