@@ -33,10 +33,12 @@ int main()
 
     // OK
     std::cout <<
-        "\nnonstd::apply(add, std::pair<int, int>(1, 2)) : " <<
-           nonstd::apply(add, std::pair<int, int>(1, 2))     <<
-        "\nnonstd::apply(add, std::array<int,2>({ 1, 2})): " <<
-           nonstd::apply(add, std::array<int,2>({ 1, 2}))    <<
+        "\nnonstd::apply(add, std::pair <int, int>(1, 2)) : " <<
+           nonstd::apply(add, std::pair <int, int>(1, 2))     <<
+        "\nnonstd::apply(add, std::tuple<int, int>(1, 2)) : " <<
+           nonstd::apply(add, std::tuple<int, int>(1, 2))     <<
+        "\nnonstd::apply(add, std::array<int, 2>({ 1, 2})): " <<
+           nonstd::apply(add, std::array<int, 2>({ 1, 2}))    <<
          '\n';
 
     // Error: can't deduce the function type
@@ -44,10 +46,12 @@ int main()
 
     // OK
     std::cout <<
-        "\nnonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f)) : " <<
-           nonstd::apply(add_lambda, std::pair<float, float>(2.0f, 3.0f))     <<
-        "\nnonstd::apply(add_lambda, std::array<float,  2>({ 2.0f, 3.0f})): " <<
-           nonstd::apply(add_lambda, std::array<float,  2>({ 2.0f, 3.0f}))    <<
+        "\nnonstd::apply(add_lambda, std::pair <float, float>(2.0f, 3.0f)) : " <<
+           nonstd::apply(add_lambda, std::pair <float, float>(2.0f, 3.0f))     <<
+        "\nnonstd::apply(add_lambda, std::tuple<float, float>(2.0f, 3.0f)) : " <<
+           nonstd::apply(add_lambda, std::tuple<float, float>(2.0f, 3.0f))     <<
+        "\nnonstd::apply(add_lambda, std::array<float,   2>({ 2.0f, 3.0f})): " <<
+           nonstd::apply(add_lambda, std::array<float,   2>({ 2.0f, 3.0f}))    <<
          '\n';
 
 #else
