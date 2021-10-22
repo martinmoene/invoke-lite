@@ -6,6 +6,7 @@
 // (See accompanying file LICENSE.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "invoke-main.t.hpp"
+#include <array>    // required with invoke_INVOKE_STD
 
 #ifndef  invoke_noexcept_op
 # define invoke_noexcept_op(expr) noexcept(expr)
