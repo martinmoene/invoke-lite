@@ -13,21 +13,25 @@
 #endif
 namespace {
 
+invoke_constexpr
 int f42()
 {
     return 42;
 }
 
+invoke_constexpr
 int f42_nef() invoke_noexcept_op( false )
 {
     return 42;
 }
 
+invoke_constexpr
 int arg( int a  )
 {
     return a;
 }
 
+invoke_constexpr
 int add( int a, int b )
 {
     return a + b;
@@ -263,6 +267,66 @@ CASE("apply: a lambda, std::array of 2 arguments (C++11)")
     EXPECT( nonstd::apply( [](int a, int b){ return a + b; }, std::array<int,2>({ 1, 2})) == 3 );
 #else
     EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a function object, std::pair of 2 arguments (C++11, constexpr)")
+{
+#if invoke_CPP11_OR_GREATER
+    constexpr auto constexpr_result = nonstd::apply( add, std::pair<int, int>(1, 2) );
+    EXPECT( constexpr_result == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a function object, std::tuple of 2 arguments (C++11, constexpr)")
+{
+#if invoke_CPP11_OR_GREATER
+    constexpr auto constexpr_result = nonstd::apply( add, std::tuple<int, int>(1, 2) );
+    EXPECT( constexpr_result == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a function object, std::array of 2 arguments (C++11, constexpr)")
+{
+#if invoke_CPP11_OR_GREATER
+    constexpr auto constexpr_result = nonstd::apply( add, std::array<int,2>({ 1, 2}) );
+    EXPECT( constexpr_result == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a lambda, std::pair of 2 arguments (C++11, constexpr)")
+{
+#if invoke_CPP17_OR_GREATER
+    constexpr auto constexpr_result = nonstd::apply( [](int a, int b){ return a + b; }, std::pair<int, int>(1, 2) );
+    EXPECT( constexpr_result == 3 );
+#else
+    EXPECT( !!"apply(): constexpr closure is not available (no C++17)" );
+#endif
+}
+
+CASE("apply: a lambda, std::tuple of 2 arguments (C++11, constexpr)")
+{
+#if invoke_CPP11_OR_GREATER
+    constexpr auto constexpr_result = nonstd::apply( add, std::tuple<int, int>(1, 2) );
+    EXPECT( constexpr_result == 3 );
+#else
+    EXPECT( !!"apply() is not available (no C++11)" );
+#endif
+}
+
+CASE("apply: a lambda, std::array of 2 arguments (C++11, constexpr)")
+{
+#if invoke_CPP17_OR_GREATER
+    constexpr auto constexpr_result = nonstd::apply( [](int a, int b){ return a + b; }, std::array<int,2>({ 1, 2}));
+    EXPECT( constexpr_result == 3 );
+#else
+    EXPECT( !!"apply(): constexpr closure is not available (no C++17)" );
 #endif
 }
 

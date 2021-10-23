@@ -86,11 +86,12 @@ For the standard's documentation, see [`invoke`](https://en.cppreference.com/w/c
 
 ### *invoke lite* implementation status
 
-| Kind               | Type or function             | Notes |
-|--------------------|------------------------------|-------|
-| &nbsp;             | apply()  | &nbsp; |
-| &nbsp;             | invoke() | &nbsp; |
-| &nbsp;             | &nbsp; | &nbsp; |
+| Kind               | C++   | Type or function | Notes |
+|--------------------|-------|------------------|-------|
+| &nbsp;             | C++11<br>&nbsp; | template&lt; class F, class Tuple ><br>constexpr decltype(auto) apply(F&& f, Tuple&& t) | &nbsp; |
+| &nbsp;             | C++98 | invoke() | &nbsp; |
+| &nbsp;             | C++98 | invoke() | &nbsp; |
+| &nbsp;             | &nbsp;| &nbsp;   | &nbsp; |
 
 ### Configuration
 
@@ -110,7 +111,7 @@ Define this to `invoke_INVOKE_STD` to select `std::invoke` as `nonstd::invoke`. 
 \-D<b>invoke\_CPLUSPLUS</b>=199711L  
 Define this macro to override the auto-detection of the supported C++ standard, if your compiler does not set the `__cplusplus` macro correctly.
 
-#### Disable exceptions
+#### Disable exceptions (no effect)
 
 -D<b>invoke_CONFIG_NO_EXCEPTIONS</b>=0
 Define this to 1 if you want to compile without exceptions. If not defined, the header tries and detect if exceptions have been disabled (e.g. via `-fno-exceptions`). Default is undefined.
@@ -163,6 +164,12 @@ apply: a function object, std::array of 2 arguments (C++11)
 apply: a lambda, std::pair of 2 arguments (C++11)
 apply: a lambda, std::tuple of 2 arguments (C++11)
 apply: a lambda, std::array of 2 arguments (C++11)
+apply: a function object, std::pair of 2 arguments (C++11, constexpr)
+apply: a function object, std::tuple of 2 arguments (C++11, constexpr)
+apply: a function object, std::array of 2 arguments (C++11, constexpr)
+apply: a lambda, std::pair of 2 arguments (C++11, constexpr)
+apply: a lambda, std::tuple of 2 arguments (C++11, constexpr)
+apply: a lambda, std::array of 2 arguments (C++11, constexpr)
 tweak header: Reads tweak header if supported [tweak]
 ```
 

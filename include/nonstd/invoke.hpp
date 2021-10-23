@@ -164,17 +164,32 @@ namespace nonstd {
 
 // Presence of C++11 language features:
 
+#define invoke_HAVE_CONSTEXPR_11            invoke_CPP11_140
 #define invoke_HAVE_NOEXCEPT                invoke_CPP11_140
 #define invoke_HAVE_TYPE_TRAITS             invoke_CPP11_90
 #define invoke_HAVE_TR1_TYPE_TRAITS         (!! invoke_COMPILER_GNUC_VERSION )
 
 // Presence of C++14 language features:
 
+#define invoke_HAVE_CONSTEXPR_14            invoke_CPP14_000
+
 // Presence of C++17 language features:
 
 #define invoke_HAVE_NODISCARD               invoke_CPP17_000
 
 // Presence of C++ language features:
+
+#if invoke_HAVE_CONSTEXPR_11
+# define invoke_constexpr constexpr
+#else
+# define invoke_constexpr /*constexpr*/
+#endif
+
+#if invoke_HAVE_CONSTEXPR_14
+# define invoke_constexpr14 constexpr
+#else
+# define invoke_constexpr14 /*constexpr*/
+#endif
 
 #if invoke_HAVE_NOEXCEPT && !invoke_CONFIG_NO_EXCEPTIONS
 # define invoke_noexcept noexcept
@@ -217,6 +232,7 @@ namespace detail {
 // C++11 implementation contributed by Peter Featherstone, @pfeatherstone
 
 template< typename F, typename ... Args >
+invoke_constexpr
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
     std::is_member_pointer<typename std::decay<F>::type>::value
@@ -226,6 +242,7 @@ auto INVOKE( F&& fn, Args&& ... args )
 }
 
 template< typename F, typename ... Args >
+invoke_constexpr
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
     ! std::is_member_pointer<typename std::decay<F>::type>::value
@@ -263,6 +280,7 @@ template< typename F, typename... ArgTypes >
 struct invoke_result : detail::invoke_result< void, F, ArgTypes...> {};
 
 template< typename F, typename... Args >
+invoke_constexpr
 typename invoke_result< F, Args...>::type
 invoke( F && f, Args &&... args )
 // noexcept( detail::is_nothrow_invocable<F, Args...>::value )
@@ -518,6 +536,7 @@ using std::index_sequence_for;
 namespace detail {
 
 template< typename F, typename Tuple, std::size_t... I >
+invoke_constexpr
 auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
 -> decltype( invoke( std::forward<F>(fn), std::get<I>(std::forward<Tuple>(tpl) )...) )
 {
@@ -527,6 +546,7 @@ auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
 } // namespace detail
 
 template< typename F, typename Tuple >
+invoke_constexpr
 auto apply( F&& fn, Tuple && tpl )
 -> decltype(
     detail::apply_impl(
