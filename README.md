@@ -100,12 +100,10 @@ If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/p
 
 ### Select `std::invoke` or `nonstd::invoke`
 
-\[*To be implemented*\]
-
 At default, *invoke lite* uses `std::invoke` if it is available and lets you use it via namespace `nonstd`. You can however override this default and explicitly request to use `std::invoke` or invoke lite's `nonstd::invoke` as `nonstd::invoke` via the following macros.
 
--D<b>invoke\_CONFIG\_SELECT\_INVOKE</b>=invoke\_SELECT\_INVOKE\_NONSTD  
-Define this to `invoke__CONFIG_SELECT_INVOKE_STD` to select `std::invoke` as `nonstd::invoke`. Define this to `invoke_SELECT_INVOKE_NONSTD` to select `nonstd::invoke` as `nonstd::invoke`. Default is undefined, which has the same effect as defining to `invoke_SELECT_INVOKE_NONSTD` currently (this may change to `invoke_SELECT_INVOKE_DEFAULT`).
+-D<b>invoke\_CONFIG\_SELECT\_INVOKE</b>=invoke\_INVOKE\_NONSTD  
+Define this to `invoke_INVOKE_STD` to select `std::invoke` as `nonstd::invoke`. Define this to `invoke_INVOKE_NONSTD` to select `nonstd::invoke` as `nonstd::invoke`. Default is undefined, which has the same effect as defining to `invoke_INVOKE_DEFAULT`.
 
 #### Standard selection macro
 
