@@ -43,7 +43,7 @@
 #endif
 
 #ifndef  invoke_USE_ALTERNATE_IMPL
-# define invoke_USE_ALTERNATE_IMPL  0
+# define invoke_USE_ALTERNATE_IMPL  1
 #endif
 
 // Control presence of exception handling (try and auto discover):
