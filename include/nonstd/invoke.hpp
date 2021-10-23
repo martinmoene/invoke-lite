@@ -42,10 +42,6 @@
 # define invoke_CONFIG_SELECT_INVOKE  invoke_INVOKE_DEFAULT
 #endif
 
-#ifndef  invoke_USE_ALTERNATE_IMPL
-# define invoke_USE_ALTERNATE_IMPL  1
-#endif
-
 // Control presence of exception handling (try and auto discover):
 
 #ifndef invoke_CONFIG_NO_EXCEPTIONS
@@ -170,6 +166,7 @@ namespace nonstd {
 
 #define invoke_HAVE_NOEXCEPT                invoke_CPP11_140
 #define invoke_HAVE_TYPE_TRAITS             invoke_CPP11_90
+#define invoke_HAVE_TR1_TYPE_TRAITS         (!! invoke_COMPILER_GNUC_VERSION )
 
 // Presence of C++14 language features:
 
@@ -207,11 +204,8 @@ namespace nonstd {
 # include <tr1/type_traits>
 #endif
 
-#if invoke_USE_ALTERNATE_IMPL   // see issue #1
-# include <functional>
-#endif
-
-#include <utility>  // std::forward
+#include <functional>   // std::mem_fn()
+#include <utility>      // std::forward()
 
 #if invoke_CPP11_OR_GREATER
 
@@ -220,17 +214,13 @@ namespace nonstd {
 namespace nonstd {
 namespace detail {
 
-#if invoke_USE_ALTERNATE_IMPL   // see issue #1
-
-#pragma message ("*** Using alternate version")
-
 // C++11 implementation contributed by Peter Featherstone, @pfeatherstone
 
 template< typename F, typename ... Args >
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
-    std::is_member_pointer<typename std::decay<F>::type>::value,
-    decltype(std::mem_fn(fn)( std::forward<Args>(args)...) )>::type
+    std::is_member_pointer<typename std::decay<F>::type>::value
+    , decltype( std::mem_fn(fn)( std::forward<Args>(args)...) ) >::type
 {
     return std::mem_fn(fn)( std::forward<Args>(args)...);
 }
@@ -238,89 +228,11 @@ auto INVOKE( F&& fn, Args&& ... args )
 template< typename F, typename ... Args >
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
-    ! std::is_member_pointer<typename std::decay<F>::type>::value,
-    decltype(std::forward<F>(fn)( std::forward<Args>(args)...) )>::type
+    ! std::is_member_pointer<typename std::decay<F>::type>::value
+    , decltype( std::forward<F>(fn)( std::forward<Args>(args)...) ) >::type
 {
     return std::forward<F>(fn)(std::forward<Args>(args)...);
 }
-
-#else // invoke_USE_ALTERNATE_IMPL
-
-template< typename T > struct is_reference_wrapper : std::false_type {};
-template< typename U > struct is_reference_wrapper<std::reference_wrapper<U>> : std::true_type {};
-
-template <typename Base, typename T, typename Derived, typename... Args>
-auto INVOKE( T Base::*pmf, Derived && ref, Args &&... args )
-    -> typename std::enable_if<
-        std::is_function<T>::value
-        && std::is_base_of<Base, typename std::decay<Derived>::type>::value
-        , decltype((std::forward<Derived>(ref).*pmf)(std::forward<Args>(args)...))>::type
-{
-    return (std::forward<Derived>(ref).*pmf)(std::forward<Args>(args)...);
-}
-
-template< typename Base, typename T, typename RefWrap, typename... Args >
-auto INVOKE( T Base::*pmf, RefWrap && ref, Args &&... args )
-    -> typename std::enable_if<
-        std::is_function<T>::value
-        && is_reference_wrapper<typename std::decay<RefWrap>::type>::value
-        , decltype((ref.get().*pmf)(std::forward<Args>(args)...))>::type
-{
-    return (ref.get().*pmf)(std::forward<Args>(args)...);
-}
-
-template< typename Base, typename T, typename Ptr, typename... Args>
-auto INVOKE( T Base::*pmf, Ptr && ptr, Args &&... args )
-    -> typename std::enable_if<
-        std::is_function<T>::value
-        && !is_reference_wrapper<typename std::decay<Ptr>::type>::value
-        && !std::is_base_of<Base, typename std::decay<Ptr>::type>::value
-        , decltype(((*std::forward<Ptr>(ptr)).*pmf)(std::forward<Args>(args)...))>::type
-{
-    return ((*std::forward<Ptr>(ptr)).*pmf)( std::forward<Args>( args )...);
-}
-
-template< typename Base, typename T, typename Derived>
-auto INVOKE( T Base::*pmd, Derived && ref )
-    -> typename std::enable_if<
-        !std::is_function<T>::value
-        && std::is_base_of<Base, typename std::decay<Derived>::type>::value
-        , decltype(std::forward<Derived>(ref).*pmd)>::type
-{
-    return std::forward<Derived>(ref).*pmd;
-}
-
-template< typename Base, typename T, typename RefWrap>
-auto INVOKE( T Base::*pmd, RefWrap && ref )
-    -> typename std::enable_if<
-        !std::is_function<T>::value
-        && is_reference_wrapper<typename std::decay<RefWrap>::type>::value
-        , decltype(ref.get().*pmd)>::type
-{
-    return std::forward<RefWrap>(ref.get()).*pmd;
-}
-
-template< typename Base, typename T, typename Ptr>
-auto INVOKE( T Base::*pmd, Ptr && ptr )
-    -> typename std::enable_if<
-        !std::is_function<T>::value
-        && !is_reference_wrapper<typename std::decay<Ptr>::type>::value
-        && !std::is_base_of<Base, typename std::decay<Ptr>::type>::value
-        , decltype((*std::forward<Ptr>(ptr)).*pmd)>::type
-{
-    return (*std::forward<Ptr>(ptr)).*pmd;
-}
-
-template< typename F, typename... Args>
-auto INVOKE( F && f, Args &&... args )
- -> typename std::enable_if<
-    !std::is_member_pointer<typename std::decay<F>::type>::value
-    , decltype(std::forward<F>(f)(std::forward<Args>(args)...))>::type
-{
-    return std::forward<F>( f )( std::forward<Args>( args )...);
-}
-
-#endif // invoke_USE_ALTERNATE_IMPL
 
 } // namespace detail
 
@@ -607,7 +519,7 @@ namespace detail {
 
 template< typename F, typename Tuple, std::size_t... I >
 auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
-    -> decltype( invoke( std::forward<F>(fn), std::get<I>(std::forward<Tuple>(tpl) )...) )
+-> decltype( invoke( std::forward<F>(fn), std::get<I>(std::forward<Tuple>(tpl) )...) )
 {
     return invoke( std::forward<F>(fn), std::get<I>( std::forward<Tuple>(tpl) )...);
 }
@@ -616,13 +528,13 @@ auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
 
 template< typename F, typename Tuple >
 auto apply( F&& fn, Tuple && tpl )
-    -> decltype(
-        detail::apply_impl(
-            std::forward<F>( fn  )
-            , std::forward<Tuple>( tpl )
-            , make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{}
-        )
+-> decltype(
+    detail::apply_impl(
+        std::forward<F>( fn  )
+        , std::forward<Tuple>( tpl )
+        , make_index_sequence<std::tuple_size<typename std::decay<Tuple>::type>::value>{}
     )
+)
 {
     return detail::apply_impl(
         std::forward<F>(fn)
