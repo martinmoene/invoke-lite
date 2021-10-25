@@ -13,25 +13,25 @@
 #endif
 namespace {
 
-invoke_constexpr
+constexpr
 int f42()
 {
     return 42;
 }
 
-invoke_constexpr
+constexpr
 int f42_nef() invoke_noexcept_op( false )
 {
     return 42;
 }
 
-invoke_constexpr
+constexpr
 int arg( int a  )
 {
     return a;
 }
 
-invoke_constexpr
+constexpr
 int add( int a, int b )
 {
     return a + b;
@@ -41,30 +41,30 @@ struct holder
 {
     int v;
 
-    invoke_constexpr
+    constexpr
     holder( int v_)
         : v(v_)
     {}
 
-    invoke_constexpr
+    constexpr
     int val() const
     {
         return v;
     }
 
-    invoke_constexpr
+    constexpr
     int add( int a ) const
     {
         return v + a;
     }
 
-    invoke_constexpr
+    constexpr
     int add_constref( int const & a ) const
     {
         return v + a;
     }
 
-    invoke_constexpr
+    constexpr
     int add_nonconst( int a )
     {
         return v + a;
@@ -78,13 +78,13 @@ struct holder
 
 struct functor
 {
-    invoke_constexpr
+    constexpr
     int operator()() const
     {
         return 42;
     }
 
-    invoke_constexpr
+    constexpr
     int operator()(int i) const
     {
         return i;
