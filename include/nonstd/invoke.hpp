@@ -161,6 +161,7 @@ namespace nonstd {
 #define invoke_CPP11_000  (invoke_CPP11_OR_GREATER)
 #define invoke_CPP14_000  (invoke_CPP14_OR_GREATER)
 #define invoke_CPP17_000  (invoke_CPP17_OR_GREATER)
+#define invoke_CPP20_000  (invoke_CPP20_OR_GREATER)
 
 // Presence of C++11 language features:
 
@@ -226,36 +227,143 @@ namespace nonstd {
 
 #pragma message ("*** Using nonstd::invoke - C++11")
 
-namespace nonstd {
+namespace nonstd { namespace invoke_lite {
+namespace std17 {
+
+#if invoke_CPP17_000
+using std::invoke_result;
+#else
+template< class F, class... Args>
+class invoke_result : public std::result_of<F&&( Args&&...)> {};
+#endif
+
+} // namespace std17
+
+namespace std20 {
+
+// Note: std::mem_fn is constexpr since C++20
+
+#if invoke_CPP20_000
+    using std::mem_fn;
+#else
+
+template< class R, class C >
+struct mem_fn_fun
+{
+    typedef R C::*F;
+    F f;
+
+    explicit constexpr mem_fn_fun( F f_ )
+        : f( f_)
+    {}
+
+    template<class... Args>
+    constexpr
+    typename std17::invoke_result<decltype(f), C, Args...>::type
+    operator()( C & c, Args&&... args )
+#if invoke_CPP17_000
+    noexcept( std::is_nothrow_invocable_v<decltype(f), Args&&...> )
+#endif
+    {
+        return (c.*f)( std::forward<Args>(args)...);
+    }
+
+    template<class... Args>
+    constexpr
+    typename std17::invoke_result<decltype(f), C, Args...>::type
+    operator()( C const & c, Args&&... args ) const
+#if invoke_CPP17_000
+    noexcept( std::is_nothrow_invocable_v<decltype(f), Args&&...> )
+#endif
+    {
+        return (c.*f)( std::forward<Args>(args)...);
+    }
+};
+
+template< class T, class C >
+struct mem_fn_obj
+{
+    typedef T C::*D;
+    D d;
+
+    explicit constexpr mem_fn_obj( D d_ )
+        : d( d_)
+    {}
+
+    constexpr
+    T & operator()( C & c ) noexcept
+    {
+        return c.*d;
+    }
+
+    constexpr
+    T const & operator()( C const & c ) const noexcept
+    {
+        return c.*d;
+    }
+
+    constexpr
+    T & operator()( C * c ) noexcept
+    {
+        return c->*d;
+    }
+
+    constexpr
+    T const & operator()( C const * c ) const noexcept
+    {
+        return c->*d;
+    }
+};
+
+template< class R, class C >
+constexpr
+auto mem_fn( R C::*m ) noexcept
+-> typename std::enable_if<
+    std::is_member_function_pointer<R C::*>::value
+    , mem_fn_fun<R, C> >::type
+{
+    return mem_fn_fun<R, C>( m );
+}
+
+template< class R, class C >
+constexpr
+auto mem_fn( R C::*m ) noexcept
+-> typename std::enable_if<
+    std::is_member_object_pointer<R C::*>::value
+    , mem_fn_obj<R, C> >::type
+{
+    return mem_fn_obj<R, C>( m );
+}
+
+#endif // invoke_CPP20_000
+
+} // namespace std20
+
 namespace detail {
 
 // C++11 implementation contributed by Peter Featherstone, @pfeatherstone
 
 template< typename F, typename ... Args >
-invoke_constexpr
+constexpr
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
     std::is_member_pointer<typename std::decay<F>::type>::value
-    , decltype( std::mem_fn(fn)( std::forward<Args>(args)...) ) >::type
+    , decltype( std20::mem_fn(fn)( std::forward<Args>(args)...) ) >::type
 {
-    return std::mem_fn(fn)( std::forward<Args>(args)...);
+    return std20::mem_fn( fn )( std::forward<Args>(args)...);
 }
 
 template< typename F, typename ... Args >
-invoke_constexpr
+constexpr
 auto INVOKE( F&& fn, Args&& ... args )
 -> typename std::enable_if<
     ! std::is_member_pointer<typename std::decay<F>::type>::value
     , decltype( std::forward<F>(fn)( std::forward<Args>(args)...) ) >::type
 {
-    return std::forward<F>(fn)(std::forward<Args>(args)...);
+    return std::forward<F>( fn )( std::forward<Args>(args)...);
 }
 
-} // namespace detail
-
 // conforming C++14 implementation (is also a valid C++11 implementation):
-
-namespace detail {
 
 template< typename AlwaysVoid, typename, typename...>
 struct invoke_result {};
@@ -271,16 +379,16 @@ struct invoke_result< decltype( void(detail::INVOKE(std::declval<F>(), std::decl
 
 } // namespace detail
 
-template< typename > struct result_of;
+// template< typename > struct result_of;
 
-template< typename F, typename... ArgTypes >
-struct result_of< F(ArgTypes...) > : detail::invoke_result< void, F, ArgTypes...> {};
+// template< typename F, typename... ArgTypes >
+// struct result_of< F(ArgTypes...) > : detail::invoke_result< void, F, ArgTypes...> {};
 
 template< typename F, typename... ArgTypes >
 struct invoke_result : detail::invoke_result< void, F, ArgTypes...> {};
 
 template< typename F, typename... Args >
-invoke_constexpr
+constexpr
 typename invoke_result< F, Args...>::type
 invoke( F && f, Args &&... args )
 // noexcept( detail::is_nothrow_invocable<F, Args...>::value )
@@ -288,7 +396,15 @@ invoke( F && f, Args &&... args )
     return detail::INVOKE( std::forward<F>( f ), std::forward<Args>( args )...);
 }
 
-} // namespace nonstd
+}} // namespace nonstd::invoke_lite
+
+namespace nonstd {
+
+using invoke_lite::invoke;
+
+
+} // // namespace
+
 
 #else // not C++17, not C++11 - invoke()
 
@@ -536,7 +652,7 @@ using std::index_sequence_for;
 namespace detail {
 
 template< typename F, typename Tuple, std::size_t... I >
-invoke_constexpr
+constexpr
 auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
 -> decltype( invoke( std::forward<F>(fn), std::get<I>(std::forward<Tuple>(tpl) )...) )
 {
@@ -546,7 +662,7 @@ auto apply_impl( F&& fn, Tuple && tpl, index_sequence<I...> )
 } // namespace detail
 
 template< typename F, typename Tuple >
-invoke_constexpr
+constexpr
 auto apply( F&& fn, Tuple && tpl )
 -> decltype(
     detail::apply_impl(

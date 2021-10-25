@@ -123,6 +123,8 @@ Define this to 1 if you want to compile without exceptions. If not defined, the 
 ## Notes and references
 
 - TBD
+- [p1065 - constexpr INVOKE](https://wg21.link/p1065). 
+- [n4169 - A proposal to add invoke function template](https://wg21.link/n4169). Tomasz Kamiński. 2014
 
 ## Appendix
 
@@ -158,18 +160,31 @@ invoke: a function object, no arguments
 invoke: a function object, 1 argument
 invoke: a lambda, no arguments
 invoke: a lambda, 1 argument
+invoke: a free function, no arguments - constexpr
+invoke: a free function, no arguments, noexcept(false) (C++11) - constexpr
+invoke: a free function, 1 argument - constexpr
+invoke: a free function, 2 arguments - constexpr
+invoke: a member function, no arguments - constexpr
+invoke: a member function, 1 argument - constexpr
+invoke: a member function, 1 const ref argument - constexpr
+invoke: (access) a data member - via const object ref - constexpr
+invoke: (access) a data member - via const object ptr - constexpr
+invoke: a function object, no arguments - constexpr
+invoke: a function object, 1 argument - constexpr
+invoke: a lambda, no arguments - constexpr (C++17)
+invoke: a lambda, 1 argument - constexpr (C++17)
 apply: a function object, std::pair of 2 arguments (C++11)
 apply: a function object, std::tuple of 2 arguments (C++11)
 apply: a function object, std::array of 2 arguments (C++11)
 apply: a lambda, std::pair of 2 arguments (C++11)
 apply: a lambda, std::tuple of 2 arguments (C++11)
 apply: a lambda, std::array of 2 arguments (C++11)
-apply: a function object, std::pair of 2 arguments (C++11, constexpr)
-apply: a function object, std::tuple of 2 arguments (C++11, constexpr)
-apply: a function object, std::array of 2 arguments (C++11, constexpr)
-apply: a lambda, std::pair of 2 arguments (C++11, constexpr)
-apply: a lambda, std::tuple of 2 arguments (C++11, constexpr)
-apply: a lambda, std::array of 2 arguments (C++11, constexpr)
+apply: a function object, std::pair of 2 arguments (C++11) - constexpr
+apply: a function object, std::tuple of 2 arguments (C++11) - constexpr
+apply: a function object, std::array of 2 arguments (C++11) - constexpr
+apply: a lambda, std::pair of 2 arguments (C++11) - constexpr
+apply: a lambda, std::tuple of 2 arguments (C++11) - constexpr
+apply: a lambda, std::array of 2 arguments (C++11) - constexpr
 tweak header: Reads tweak header if supported [tweak]
 ```
 
