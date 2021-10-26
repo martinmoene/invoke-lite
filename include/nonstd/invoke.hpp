@@ -82,13 +82,23 @@
 
 #define invoke_USES_STD_INVOKE  ( (invoke_CONFIG_SELECT_INVOKE == invoke_INVOKE_STD) || ((invoke_CONFIG_SELECT_INVOKE == invoke_INVOKE_DEFAULT) && invoke_HAVE_STD_INVOKE) )
 
+// Allow for #pragma message variation:
+
+#ifdef _MSC_VER
+# define invoke_lpar (
+# define invoke_rpar )
+#else
+# define invoke_lpar
+# define invoke_rpar
+#endif
+
 //
 // Use standard C++17 version:
 //
 
 #if invoke_USES_STD_INVOKE
 
-#pragma message ("*** Using std::invoke")
+#pragma message invoke_lpar "*** Using std::invoke" invoke_rpar
 
 #include <functional>
 
@@ -98,7 +108,7 @@ namespace nonstd {
 
 #else // invoke_USES_STD_INVOKE
 
-#pragma message ("*** Using nonstd::invoke - C++98/C++11")
+#pragma message invoke_lpar "*** Using nonstd::invoke - C++98/C++11" invoke_rpar
 
 //
 // C++11, code taken from http://en.cppreference.com/w/cpp/types/result_of:
@@ -225,7 +235,7 @@ namespace nonstd {
 
 #if invoke_CPP11_OR_GREATER
 
-#pragma message ("*** Using nonstd::invoke - C++11")
+#pragma message invoke_lpar "*** Using nonstd::invoke - C++11" invoke_rpar
 
 namespace nonstd { namespace invoke_lite {
 namespace std17 {
@@ -408,7 +418,7 @@ using invoke_lite::invoke;
 
 #else // not C++17, not C++11 - invoke()
 
-#pragma message ("*** Using nonstd::invoke - C++98")
+#pragma message invoke_lpar "*** Using nonstd::invoke - C++98" invoke_rpar
 
 //
 // C++98, code based on proposal n1454.
@@ -588,7 +598,7 @@ using std98::invoke;
 
 #if invoke_USES_STD_INVOKE
 
-#pragma message ("*** Using std::apply.")
+#pragma message invoke_lpar "*** Using std::apply." invoke_rpar
 
 #include <tuple>
 
@@ -600,7 +610,7 @@ namespace nonstd {
 
 #elif invoke_CPP11_OR_GREATER
 
-#pragma message ("*** Using nonstd::invoke - C++11")
+#pragma message invoke_lpar "*** Using nonstd::invoke - C++11" invoke_rpar
 
 #include <array>
 #include <tuple>
@@ -609,7 +619,7 @@ namespace nonstd { namespace apply_lite {
 
 #if invoke_CPLUSPLUS < 201402L
 
-#pragma message ("*** Defining index_sequence etc.")
+#pragma message invoke_lpar "*** Defining index_sequence etc." invoke_rpar
 
 template< std::size_t... Ints >
 struct index_sequence
@@ -647,7 +657,7 @@ using std::index_sequence_for;
 
 #endif // invoke_CPLUSPLUS < 201402L
 
-#pragma message ("*** Using nonstd::apply - C++11.")
+#pragma message invoke_lpar "*** Using nonstd::apply - C++11." invoke_rpar
 
 namespace detail {
 
@@ -691,7 +701,7 @@ using apply_lite::apply;
 
 #else // invoke_CPP11_OR_GREATER - apply()
 
-#pragma message ("*** nonstd::apply(): No implementation for C++98.")
+#pragma message invoke_lpar "*** nonstd::apply(): No implementation for C++98." invoke_rpar
 
 #endif // invoke_USES_STD_INVOKE - apply()
 
