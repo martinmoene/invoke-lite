@@ -99,7 +99,7 @@ For the standard's documentation, see [`invoke`](https://en.cppreference.com/w/c
 
 If the compiler supports [`__has_include()`](https://en.cppreference.com/w/cpp/preprocessor/include), *invoke lite* supports the [tweak header](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html) mechanism. Provide your *tweak header* as `nonstd/invoke.tweak.hpp` in a folder in the include-search-path. In the tweak header, provide definitions as documented below, like `#define invoke_CPLUSPLUS 201103L`.
 
-### Select `std::invoke` or `nonstd::invoke`
+#### Select `std::invoke` or `nonstd::invoke`
 
 At default, *invoke lite* uses `std::invoke` if it is available and lets you use it via namespace `nonstd`. You can however override this default and explicitly request to use `std::invoke` or invoke lite's `nonstd::invoke` as `nonstd::invoke` via the following macros.
 
