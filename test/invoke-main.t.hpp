@@ -12,6 +12,25 @@
 
 #include invoke_INVOKE_HEADER
 
+// Provide macros for compilation with std::invoke(), std::apply():
+
+#ifndef invoke_COMPILER_MSVC_VER
+# if defined(_MSC_VER ) && !defined(__clang__)
+#  define invoke_COMPILER_MSVC_VER      (_MSC_VER )
+# else
+#  define invoke_COMPILER_MSVC_VER      0
+# endif
+#endif
+
+// half-open range [lo..hi):
+#ifndef  invoke_BETWEEN
+# define invoke_BETWEEN( v, lo, hi ) ( (lo) <= (v) && (v) < (hi) )
+#endif
+
+#ifndef  invoke_noexcept_op
+# define invoke_noexcept_op(expr) noexcept(expr)
+#endif
+
 // Compiler warning suppression for usage of lest:
 
 #ifdef __clang__

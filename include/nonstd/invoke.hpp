@@ -141,7 +141,7 @@ namespace nonstd {
 #endif
 
 // half-open range [lo..hi):
-//#define invoke_BETWEEN( v, lo, hi ) ( (lo) <= (v) && (v) < (hi) )
+#define invoke_BETWEEN( v, lo, hi ) ( (lo) <= (v) && (v) < (hi) )
 
 // Presence of language and library features:
 
@@ -647,7 +647,7 @@ using std::index_sequence_for;
 
 #endif // invoke_CPLUSPLUS < 201402L
 
-#pragma message ("*** Using nonstd::apply.")
+#pragma message ("*** Using nonstd::apply - C++11.")
 
 namespace detail {
 

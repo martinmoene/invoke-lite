@@ -8,9 +8,6 @@
 #include "invoke-main.t.hpp"
 #include <array>    // required with invoke_INVOKE_STD
 
-#ifndef  invoke_noexcept_op
-# define invoke_noexcept_op(expr) noexcept(expr)
-#endif
 namespace {
 
 constexpr
@@ -223,81 +220,81 @@ CASE("invoke: a lambda, 1 argument")
 
 CASE("invoke: a free function, no arguments - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( f42 );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a free function, no arguments, noexcept(false) (C++11) - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( f42_nef );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a free function, 1 argument - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( arg, 7 );
 
     EXPECT( constexpr_result == 7 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a free function, 2 arguments - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( add, 1, 2 );
 
     EXPECT( constexpr_result == 3 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a member function, no arguments - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr holder v(42);
     constexpr auto constexpr_result = nonstd::invoke( &holder::val, v );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a member function, 1 argument - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr holder v(1);
     constexpr auto constexpr_result = nonstd::invoke( &holder::add, v, 2 );
 
     EXPECT( constexpr_result == 3 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a member function, 1 const ref argument - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr holder v(1);
     constexpr auto constexpr_result = nonstd::invoke( &holder::add_constref, v, 2 );
 
     EXPECT( constexpr_result == 3 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
@@ -329,25 +326,25 @@ CASE("invoke: a member function, 1 const ref argument - constexpr")
 
 CASE("invoke: (access) a data member - via const object ref - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr holder h(42);
     constexpr auto constexpr_result = nonstd::invoke( &holder::v, h );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: (access) a data member - via const object ptr - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr holder h(42);
     constexpr auto constexpr_result = nonstd::invoke( &holder::v, &h );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
@@ -403,45 +400,45 @@ CASE("invoke: (access) a data member - via const object ptr - constexpr")
 
 CASE("invoke: a function object, no arguments - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( functor() );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a function object, 1 argument - constexpr")
 {
-#if invoke_CPP11_OR_GREATER
+#if invoke_CPP11_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( functor(), 42 );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr is not available (no C++11)" );
+    EXPECT( !!"invoke(): constexpr is not available (no C++11, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a lambda, no arguments - constexpr (C++17)")
 {
-#if invoke_CPP17_OR_GREATER
+#if invoke_CPP17_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( [](){ return 42; } );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr closure is not available (no C++17)" );
+    EXPECT( !!"invoke(): constexpr closure is not available (no C++17, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
 CASE("invoke: a lambda, 1 argument - constexpr (C++17)")
 {
-#if invoke_CPP17_OR_GREATER
+#if invoke_CPP17_OR_GREATER && !(invoke_USES_STD_INVOKE && invoke_BETWEEN(invoke_COMPILER_MSVC_VER, 1910, 1920))
     constexpr auto constexpr_result = nonstd::invoke( [](int a){ return a; }, 42 );
 
     EXPECT( constexpr_result == 42 );
 #else
-    EXPECT( !!"invoke(): constexpr closure is not available (no C++17)" );
+    EXPECT( !!"invoke(): constexpr closure is not available (no C++17, or VC141/1910/VS2017 with std::invoke())" );
 #endif
 }
 
