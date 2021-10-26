@@ -270,7 +270,7 @@ struct mem_fn_fun
     template<class... Args>
     constexpr
     typename std17::invoke_result<decltype(f), C, Args...>::type
-    operator()( C & c, Args&&... args )
+    operator()( C & c, Args&&... args ) const
 #if invoke_CPP17_000
     noexcept( std::is_nothrow_invocable_v<decltype(f), Args&&...> )
 #endif
@@ -301,7 +301,7 @@ struct mem_fn_obj
     {}
 
     constexpr
-    T & operator()( C & c ) noexcept
+    T & operator()( C & c ) const noexcept
     {
         return c.*d;
     }
@@ -313,7 +313,7 @@ struct mem_fn_obj
     }
 
     constexpr
-    T & operator()( C * c ) noexcept
+    T & operator()( C * c ) const noexcept
     {
         return c->*d;
     }
