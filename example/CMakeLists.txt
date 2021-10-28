@@ -74,7 +74,7 @@ endmacro()
 
 function( make_target name no_exceptions )
     add_executable             ( ${PROGRAM}-${name} ${name}.cpp )
-    target_include_directories ( ${PROGRAM}-${name} PRIVATE ../../variant-lite/include )
+    # target_include_directories ( ${PROGRAM}-${name} PRIVATE XX )
     target_link_libraries      ( ${PROGRAM}-${name} PRIVATE ${PACKAGE} )
     set_property               ( TARGET ${PROGRAM}-${name} PROPERTY CXX_STANDARD 11 )   # TODO here for now
     if ( no_exceptions )
