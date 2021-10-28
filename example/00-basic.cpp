@@ -4,14 +4,17 @@
 #include <array>
 #include <utility>
 
-int add(int first, int second)
+constexpr int add(int first, int second)
 {
     return first + second;
 }
 
 int main()
 {
+    constexpr auto sum = nonstd::invoke(add, 1, 2);
+
     return
+        + sum
         + nonstd::invoke(add, 1, 2)
         + nonstd::apply(add, std::pair <int, int>(1, 2))
         + nonstd::apply(add, std::tuple<int, int>(1, 2))
