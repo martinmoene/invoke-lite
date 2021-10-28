@@ -35,11 +35,12 @@ endif()
 
 # If toplevel project, enable building and performing of tests, disable building of examples:
 
-option( INVOKE_LITE_OPT_BUILD_TESTS    "Build and perform invoke-lite tests" ${invoke_IS_TOPLEVEL_PROJECT} )
-option( INVOKE_LITE_OPT_BUILD_EXAMPLES "Build invoke-lite examples" OFF )
+option( INVOKE_LITE_OPT_BUILD_TESTS      "Build and perform invoke-lite tests" ${invoke_IS_TOPLEVEL_PROJECT} )
+option( INVOKE_LITE_OPT_BUILD_EXAMPLES   "Build invoke-lite examples" OFF )
+option( INVOKE_LITE_OPT_BUILD_BENCHMARKS "Build invoke-lite examples" OFF )
 
-option( INVOKE_LITE_OPT_SELECT_STD     "Select std::invoke"    OFF )
-option( INVOKE_LITE_OPT_SELECT_NONSTD  "Select nonstd::invoke" OFF )
+option( INVOKE_LITE_OPT_SELECT_STD       "Select std::invoke"    OFF )
+option( INVOKE_LITE_OPT_SELECT_NONSTD    "Select nonstd::invoke" OFF )
 
 # If requested, build and perform tests, build examples:
 
@@ -50,6 +51,10 @@ endif()
 
 if ( INVOKE_LITE_OPT_BUILD_EXAMPLES )
     add_subdirectory( example )
+endif()
+
+if ( INVOKE_LITE_OPT_BUILD_BENCHMARKS )
+    add_subdirectory( benchmark )
 endif()
 
 #
