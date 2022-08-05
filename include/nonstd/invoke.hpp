@@ -55,7 +55,7 @@
 # endif
 #endif
 
-// C++ language version detection (C++20 is speculative):
+// C++ language version detection (C++23 is speculative):
 // Note: VC14.0/1900 (VS2015) lacks too much from C++14.
 
 #ifndef   invoke_CPLUSPLUS
@@ -70,7 +70,7 @@
 #define invoke_CPP11_OR_GREATER  ( invoke_CPLUSPLUS >= 201103L )
 #define invoke_CPP14_OR_GREATER  ( invoke_CPLUSPLUS >= 201402L )
 #define invoke_CPP17_OR_GREATER  ( invoke_CPLUSPLUS >= 201703L )
-#define invoke_CPP20_OR_GREATER  ( invoke_CPLUSPLUS >= 202000L )
+#define invoke_CPP20_OR_GREATER  ( invoke_CPLUSPLUS >= 202002L )
 
 // Use C++17 std::invoke if available and requested:
 
